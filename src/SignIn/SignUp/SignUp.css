@@ -1,0 +1,44 @@
+@keyframes moveRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes moveLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.moving-svg {
+  animation: moveRight 1.5s forwards, moveLeft 1.5s ease-in infinite alternate;
+}
+@keyframes fillProgress {
+  from {
+    width: 50%; /* Start width */
+  }
+  to {
+    width: 100%; /* End width */
+  }
+}
+
+.fill-progress {
+  animation: fillProgress 1s ease-in-out; /* Adjust the animation duration and timing function as needed */
+}
+.empty-progress {
+  animation: emptyprogres 1s ease-in-out;
+}
+@keyframes emptyprogres {
+  from {
+    width: 100%; /* Start width */
+  }
+  to {
+    width: 50%; /* End width */
+  }
+}

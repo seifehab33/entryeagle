@@ -1,0 +1,31 @@
+.vertical-line {
+  border: 1px solid #ee5c24;
+}
+
+.logo {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.animateLogo {
+  transition: opacity 1s ease;
+}
+
+.animate-from-right {
+  animation: fromRight 1.2s ease forwards;
+}
+
+@keyframes fromRight {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+input:focus {
+  border: none;
+  outline: none;
+}

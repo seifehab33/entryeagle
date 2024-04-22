@@ -1,0 +1,30 @@
+.indetails > div > p > span {
+  color: #ee5c24;
+  font-weight: bold;
+  font-size: 17px;
+}
+.indetails > div > p {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  font-size: 15px;
+}
+.landscape-animation {
+  background: linear-gradient(
+    to right,
+    #f5e1bc 0%,
+    #d4c9b5 50%,
+    #f5e1bcd8 100%
+  );
+  background-size: 300% 100%;
+  animation: slide-background 10s linear infinite;
+}
+
+@keyframes slide-background {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}

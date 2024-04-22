@@ -1,0 +1,64 @@
+.about {
+  background-image: url("../../images/Survillience-2.jpeg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 550px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+hr {
+  background-color: #fff;
+}
+hr.hr-1 {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+}
+@keyframes slideFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Apply animations to the elements */
+.animate-left-to-right {
+  animation: slideFromLeft 1s ease-in-out forwards;
+}
+
+.animate-right-to-left {
+  animation: slideFromRight 1s ease-in-out forwards;
+}
+@keyframes slideFromTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-from-top {
+  animation: slideFromTop 1s ease forwards;
+}

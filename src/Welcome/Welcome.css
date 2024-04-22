@@ -1,0 +1,55 @@
+/* .content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #faf0dd;
+  height: 100vh;
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.7s ease-in-out, transform 0.8s ease-in-out;
+  animation: fadeInAnimation 0.5s ease-in-out, slideFromBottom 1.5s ease-in-out;
+}
+
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideFromBottom {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+} */
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #faf0dd;
+  height: 100vh;
+  opacity: 0;
+}
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.7s ease-in-out;
+  animation: fadeInAnimation 0.5s ease-in-out;
+}
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

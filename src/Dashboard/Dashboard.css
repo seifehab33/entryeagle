@@ -1,0 +1,42 @@
+.options {
+  border: 1px solid #ee5c24;
+  color: #ee5c24;
+}
+.border-none {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.border-none th,
+.border-none td {
+  border: none;
+}
+.table-camera {
+  background-color: #f5e1bc;
+}
+table > thead > tr {
+  color: #ee5c24;
+}
+.view-button {
+  color: #ee5c24;
+  background-color: white;
+  border: 1px solid #ee5c24;
+}
+.row-with-padding td {
+  padding: 10px; /* Adjust padding as needed */
+}
+/* .calendar {
+  position: absolute;
+  right: 0;
+  top: 30%;
+} */
+.react-calendar__tile--active {
+  background-color: #ee5c24 !important;
+  border-radius: 7px;
+}
+.react-calendar {
+  background-color: #f5e1bc !important; /* Change the background color of the calendar */
+  color: #494949;
+  border: none !important;
+  border-radius: 7px;
+}

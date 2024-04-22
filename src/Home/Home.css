@@ -1,0 +1,34 @@
+/* .home {
+  position: absolute;
+  width: 100%;
+} */
+.home .heading {
+  font-size: 48px;
+  font-weight: bold;
+  color: #494949;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background-color: orange;
+  color: white;
+  gap: 15px;
+  justify-content: center;
+}
+.stat:nth-child(1) {
+  background-color: #f7982c;
+}
+.stat:nth-child(2) {
+  background-color: #ee5c23;
+}
+.stat:nth-child(3) {
+  background-color: #70845f;
+}
+.stat:nth-child(4) {
+  background-color: #a1a67d;
+}
+.stat > span:nth-child(1) {
+  font-weight: bold;
+  font-size: 20px;
+}
