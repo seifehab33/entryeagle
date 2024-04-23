@@ -155,8 +155,7 @@ function RelativesListCommunity() {
               <div className="find flex justify-center items-center mt-4">
                 <Link
                   to={{
-                    pathname: `/ProfileDetails/${user.id}`,
-                    state: { users }, // Pass the users array as state
+                    pathname: `/ProfileDetails/${id}/${user.user_id}`,
                   }}
                 >
                   <button

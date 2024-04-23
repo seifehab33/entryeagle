@@ -65,7 +65,7 @@ function App() {
           <Route exact path="/Relatives'List" element={<RelativesList/>}/>
           <Route exact path="/Relatives'List/user/:id" element={<UserDetails/>}/>
           <Route exact path="/Person'sList" element={<PersonList/>}/>
-          <Route path="/ProfileDetails/:id" element={<ProfileDetails/>}/>
+          <Route path="/ProfileDetails/:ComId/:id" element={<ProfileDetails/>}/>
           <Route path="/ProfileDetails/:id/History" element={<HistoryPerson />} />
           <Route path="/CommunityList" element={<CommunityList/>}/>
           <Route path='/PrivacyPolicy' element={<PrivacyPolicy/>}/>
