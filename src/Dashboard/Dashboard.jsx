@@ -11,6 +11,7 @@ function Dashboard() {
   const [userTable, setuserTable] = useState([]);
   const [cameras, setCameras] = useState([]);
   const[frames,setFrames]=useState(null)
+  const [spinnerVisible, setSpinnerVisible] = useState(false);
   const[camera_index,setcameraindex]=useState(0)
   const handleDateChange = (date) => {
     setSelectedDate(date); // Update selected date when a new date is selected
@@ -34,11 +35,18 @@ function Dashboard() {
 // },[camera_index])
 useEffect(() => {
   const fetchCameraList = async () => {
+    try {
       const response = await axios.get('http://localhost:5000/api/cameras');
       setCameras(response.data);
+    } catch (error) {
+      console.error("Error fetching camera list:", error); // Log the error to console
+      setSpinnerVisible(true); // Show the spinner on error
+
+    }
   };
   fetchCameraList();
 }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -152,9 +160,23 @@ useEffect(() => {
                             src={`http://localhost:5000/video_feed/${camera_index}`}
                             alt={`Camera Feed ${cameraId}`}
                             style={{ width: '60%' }}
+                            onError={(e) => {
+                              e.target.style.display = 'none'; // Hide the image on error
+                              setSpinnerVisible(true); // Show the spinner on error
+                            }}
+                            onLoad={() => {
+                              setSpinnerVisible(false); // Hide the spinner when the image loads
+                          }}
+                          
                         />
+                   
                     </div>
                 ))}
+                 {spinnerVisible && (
+              <div className="flex justify-center items-center h-full">
+                  <div className="animate-spin rounded-full border-t-4 border-gray-200 h-20 w-20"></div>
+              </div>
+          )}
         <div className="">
           <table className="border-none table-camera w-full md:max-w-[920px] rounded-sm">
             <thead>
