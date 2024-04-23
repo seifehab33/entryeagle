@@ -67,6 +67,9 @@ function ProfileDetails() {
         }
       );
       console.log(response.data);
+      setUser(null);
+      navigate(`/Relatives/${ComId}`);
+
       // Handle success, maybe show a message or update the UI accordingly
     } catch (error) {
       console.error("Error removing user from community:", error);
