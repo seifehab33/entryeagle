@@ -19,6 +19,7 @@ import Footer from './Footer/Footer';
 import AboutUs from './Home/AboutUs/AboutUs';
 import PrivacyPolicy from './Home/PrivacyPolicy/PrivacyPolicy';
 import ContactUs from './Home/ContactUs/ContactUs';
+import RelativesListCommunity from './CommunityList/Relative\'sListCommunity';
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -64,11 +65,12 @@ function App() {
           <Route exact path="/Relatives'List" element={<RelativesList/>}/>
           <Route exact path="/Relatives'List/user/:id" element={<UserDetails/>}/>
           <Route exact path="/Person'sList" element={<PersonList/>}/>
-          <Route path="/ProfileDetails/:id" element={<ProfileDetails/>}/>
+          <Route path="/ProfileDetails/:ComId/:id" element={<ProfileDetails/>}/>
           <Route path="/ProfileDetails/:id/History" element={<HistoryPerson />} />
           <Route path="/CommunityList" element={<CommunityList/>}/>
           <Route path='/PrivacyPolicy' element={<PrivacyPolicy/>}/>
           <Route path='/ContactUs' element={<ContactUs/>}/>
+          <Route path="/Relatives/:id" element={<RelativesListCommunity/>}/>
 
         </Routes>
         </main>

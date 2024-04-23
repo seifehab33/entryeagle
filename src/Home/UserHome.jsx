@@ -2,20 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function UserHome() {
-  // const [showRandomNumber, setShowRandomNumber] = useState(false);
-  // const [randomNumber, setRandomNumber] = useState(null);
-
-  // const generateRandomNumber = () => {
-  //   const newRandomNumber = Math.floor(10000 + Math.random() * 90000);
-  //   return newRandomNumber;
-  // };
-
-  // const handleCreateClick = () => {
-  //   const newRandomNumber = generateRandomNumber();
-
-  //   setRandomNumber(newRandomNumber);
-  //   setShowRandomNumber(true);
-  // };
   const [communityId, setCommunityId] = useState("");
   const [communityname, setCommunityname] = useState("");
   const [userName, setUserName] = useState("");

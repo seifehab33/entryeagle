@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CommunityTable } from "./CommunityData";
 import { Typography, Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,8 @@ function CommunityList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5); // Change this value to adjust items per page
   const [users, setUsers] = useState(CommunityTable);
+  const [communities, setCommunities] = useState([]);
+
   const navigate = useNavigate();
   // Filter users based on the search query and host
   const filteredUsers = users.filter(
@@ -26,7 +28,22 @@ function CommunityList() {
   };
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  useEffect(() => {
+    const fetchCommunities = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/communities/"); // Replace this with your actual API endpoint
+        if (!response.ok) {
+          throw new Error("Failed to fetch communities");
+        }
+        const data = await response.json();
+        setCommunities(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
+    fetchCommunities();
+  }, []);
   return (
     <div className="flex flex-col gap-7 mt-5 px-8 mb-5">
       <div className="heading-relatives">
@@ -63,22 +80,24 @@ function CommunityList() {
           <thead className="border-b-[2px] border-[#EE5C24] ">
             <tr>
               <th className="px-4 py-2">No</th>
-              <th className="px-4 py-2">Host</th>
-              <th className="px-4 py-2">Host-email</th>
+              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Community Id</th>
               <th className="px-4 py-2">Relatives</th>
               <th className="px-4 py-2">Edit</th>
             </tr>
           </thead>
           <tbody>
-            {currentUsers.map((row, index) => (
-              <tr key={index}>
-                <td className="px-4 py-2 text-center">{row.id}</td>
-                <td className="px-4 py-2 text-center">{row.Host}</td>
-                <td className="px-4 py-2 text-center">{row.HostEmail}</td>
+            {communities.map((community, id) => (
+              <tr key={id}>
+                <td className="px-4 py-2 text-center">{id + 1}</td>
+                <td className="px-4 py-2 text-center">{community.name}</td>
+                <td className="px-4 py-2 text-center">
+                  {community.Community_ID}
+                </td>
                 <td className="px-4 py-2 text-center">
                   {/* Button to navigate to Relatives page */}
                   <button
-                    onClick={() => handleShowRelatives(row.id)}
+                    onClick={() => handleShowRelatives(community.Community_ID)}
                     className="text-[#ee5c24]  p-1 px-4 text-sm rounded-xl focus:outline-none bg-white"
                   >
                     Relatives

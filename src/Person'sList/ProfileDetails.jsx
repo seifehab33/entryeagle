@@ -13,7 +13,7 @@ import {
 import "./Person'sList.css";
 
 function ProfileDetails() {
-  const { id } = useParams();
+  const { ComId, id } = useParams();
   const [user, setUser] = useState([]);
   const [size, setSize] = useState(null); // Added state for size
   const [formData, setFormData] = useState({
@@ -57,7 +57,22 @@ function ProfileDetails() {
 
     fetchUser();
   }, [id]);
-
+  const removeUserFromCommunity = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/remove-user-from-community/",
+        {
+          person_id: user.id,
+          community_id: parseInt(ComId), // Assuming you have this property in your user object
+        }
+      );
+      console.log(response.data);
+      // Handle success, maybe show a message or update the UI accordingly
+    } catch (error) {
+      console.error("Error removing user from community:", error);
+      // Handle error, maybe show an error message to the user
+    }
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     // Logic to update user data
@@ -85,7 +100,7 @@ function ProfileDetails() {
           <img
             src={`http://127.0.0.1:8000/${user.photo_url}`}
             alt="userimg"
-            className="w-[250px] rounded-full drop-shadow-xl shadow-gray-600"
+            className="h-[250px] w-[250px] rounded-full drop-shadow-xl shadow-gray-600"
           />
           <div className="">
             <p className="font-bold text-4xl capitalize">{user.first_name}</p>
@@ -134,7 +149,10 @@ function ProfileDetails() {
         </div>
       </div>
       <div className="op-buttons flex justify-end gap-2">
-        <button className="relative flex h-[50px] w-40 items-center justify-center overflow-hidden bg-white text-[#EE5C24] shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:text-white hover:before:h-56 hover:before:w-56">
+        <button
+          onClick={removeUserFromCommunity}
+          className="relative flex h-[50px] w-40 items-center justify-center overflow-hidden bg-white text-[#EE5C24] shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:text-white hover:before:h-56 hover:before:w-56"
+        >
           <span className="relative z-10">Remove</span>
         </button>
         <button
