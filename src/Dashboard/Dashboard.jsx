@@ -10,26 +10,35 @@ function Dashboard() {
   const [searchText, setSearchText] = useState(""); // State for search bar
   const [userTable, setuserTable] = useState([]);
   const [cameras, setCameras] = useState([]);
-
+  const[frames,setFrames]=useState(null)
+  const[camera_index,setcameraindex]=useState(0)
   const handleDateChange = (date) => {
     setSelectedDate(date); // Update selected date when a new date is selected
   };
-  useEffect(() => {
-    fetchCameras();
-  }, []);
-
-  const fetchCameras = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/");
-      if (!response.ok) {
-        throw new Error("Failed to fetch cameras");
-      }
-      const data = await response.json();
-      setCameras(data.cameras);
-    } catch (error) {
-      console.error("Error fetching cameras:", error);
-    }
+//   useEffect(()=>{
+    
+//     const fetchCameras = async () => {
+//       try {
+//         const response = await fetch(`http://localhost:5000/video_feed/${camera_index}`);
+//         if (!response.ok) {
+//           throw new Error("Failed to fetch cameras");
+//         }
+//         const data = await response.blob();
+//         setFrames(URL.createObjectURL(data))
+//       } catch (error) {
+//         console.error("Error fetching cameras:", error);
+//       }
+//     };
+//   const interval = setInterval(fetchCameras,1000)
+//   return ()=>clearInterval(interval)
+// },[camera_index])
+useEffect(() => {
+  const fetchCameraList = async () => {
+      const response = await axios.get('http://localhost:5000/api/cameras');
+      setCameras(response.data);
   };
+  fetchCameraList();
+}, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -124,23 +133,28 @@ function Dashboard() {
               name="camera"
               id="camera"
               className="options px-2 rounded-md"
+              value={camera_index}
+              onChange={(e)=>{setcameraindex(parseInt(e.target.value))}}
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
+              <option value={0}>1</option>
+              <option value={1}>2</option>
             </select>
+            <p>{cameras}</p>
+            <p>{camera_index}</p>
+
+
           </div>
         </div>
-        <div className="camera-view">
-          {cameras.map((cameraId) => (
-            <div className="camera" key={cameraId}>
-              <h2>Camera {cameraId}</h2>
-              <video
-                autoPlay
-                src={`http://localhost:5000/video_feed/${cameraId}/`}
-              />
-            </div>
-          ))}
-        </div>
+        {cameras.map((cameraId, index) => (
+                    <div className="camera-view" key={index}>
+                        <h2>Camera {camera_index}</h2>
+                        <img
+                            src={`http://localhost:5000/video_feed/${camera_index}`}
+                            alt={`Camera Feed ${cameraId}`}
+                            style={{ width: '60%' }}
+                        />
+                    </div>
+                ))}
         <div className="">
           <table className="border-none table-camera w-full md:max-w-[920px] rounded-sm">
             <thead>
@@ -237,3 +251,5 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+
