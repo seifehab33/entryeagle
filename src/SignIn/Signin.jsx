@@ -28,6 +28,7 @@ function Signin({ onSignIn }) {
       if (response.ok) {
         setUserType("user");
         setIsLoggedIn(true);
+        localStorage.setItem("firstname", email);
         navigate("/UserPage");
       } else {
         // Handle sign-in failure

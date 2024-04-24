@@ -245,9 +245,10 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
                 variant="text"
                 size="sm"
                 className="hidden lg:inline-block"
+                onClick={handleLogout}
               >
                 <div className="profile">
-                  <button onClick={handleLogout}>
+                  <button>
                     <svg
                       className="w-5 h-5"
                       viewBox="0 0 25 26"
@@ -330,7 +331,13 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
                     </svg>
                   </div>
                 </Button>
-                <Button fullWidth variant="text" size="sm" className="">
+                <Button
+                  fullWidth
+                  variant="text"
+                  size="sm"
+                  className=""
+                  onClick={handleLogout}
+                >
                   <div className="profile">
                     <svg
                       className="w-5 h-5"
