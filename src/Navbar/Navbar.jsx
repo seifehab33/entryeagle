@@ -17,7 +17,6 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
   const AdminUser = location.pathname === "/AdminSign";
   const SignUp = location.pathname === "/SignUp";
   const Welcome = location.pathname === "/";
-  // const [disableRightClick, setDisableRightClick] = useState(true);
 
   const { userType, setUserType, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
@@ -27,6 +26,7 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
     // Clear authentication data from localStorage
     localStorage.removeItem("userType");
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("firstname");
     // Clear userType and isLoggedIn states
     setUserType(null);
     setIsLoggedIn(false);
