@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Home from './Home/Home';
 import Dashboard from './Dashboard/Dashboard';
@@ -20,36 +20,17 @@ import AboutUs from './Home/AboutUs/AboutUs';
 import PrivacyPolicy from './Home/PrivacyPolicy/PrivacyPolicy';
 import ContactUs from './Home/ContactUs/ContactUs';
 import RelativesListCommunity from './CommunityList/Relative\'sListCommunity';
+import { UserProvider } from './UserContext';
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isSignedUp, setIsSignedUp] = useState(false);
 
-  useEffect(() => {
-    const isAdminStored = localStorage.getItem('isAdmin');
-    if (isAdminStored) {
-      setIsAdmin(isAdminStored === 'true');
-    }
-  }, []);
 
-  const handleSignIn = (email, password) => {
-    if (email === 'admin@gmail.com' && password === '123456789') {
-      setIsAdmin(true);
-      localStorage.setItem('isAdmin', true);
-    } else {
-      setIsAdmin(false);
-      localStorage.setItem('isAdmin', false);
-    }
-  };
 
-  const handleLogout = () => {
-    localStorage.removeItem('isAdmin',false);
-    setIsAdmin(false);
-  };
   return (
     <div className='App flex flex-col min-h-screen '>
+      <UserProvider>
       <Router>
-        {<NavbarDefault isAdmin={isAdmin} isSignedUp={isSignedUp} onlogout={handleLogout}/>}
+        {<NavbarDefault />}
         <main className='flex-grow '>
         <Routes>
           <Route exact path="/" element={<Welcome />} />
@@ -58,9 +39,9 @@ function App() {
 
           <Route exact path="/UserPage" element={<UserHome />} />
           <Route exact path="/Dashboard" element={<Dashboard />} />
-          <Route exact path="/UserSign" element={<Signin onSignIn={(email, password) => handleSignIn(email, password)} />} />
-          <Route exact path="/AdminSign" element={<AdminSign onSignIn={(email, password) => handleSignIn(email, password)} />} />
-          <Route exact path="/SignUp" element={<SignUp setIsSignedUp={setIsSignedUp}/>}/>
+          <Route exact path="/UserSign" element={<Signin />} />
+          <Route exact path="/AdminSign" element={<AdminSign />} />
+          <Route exact path="/SignUp" element={<SignUp />}/>
           <Route exact path="/FormSignUp" element={<FormSignUp/>}/>
           <Route exact path="/Relatives'List" element={<RelativesList/>}/>
           <Route exact path="/Relatives'List/user/:id" element={<UserDetails/>}/>
@@ -76,6 +57,7 @@ function App() {
         </main>
         <Footer/>
       </Router>
+      </UserProvider>
     </div>
   );
 }

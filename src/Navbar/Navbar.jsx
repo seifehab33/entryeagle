@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useContext } from "react";
 import "./Navbar.css";
 import {
   Navbar,
@@ -7,8 +7,9 @@ import {
   Button,
   IconButton,
 } from "@material-tailwind/react";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../images/Our logo-01.png";
+import UserContext from "../UserContext";
 export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
   const [openNav, setOpenNav] = React.useState(false);
   const location = useLocation();
@@ -16,29 +17,21 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
   const AdminUser = location.pathname === "/AdminSign";
   const SignUp = location.pathname === "/SignUp";
   const Welcome = location.pathname === "/";
-  const [disableRightClick, setDisableRightClick] = useState(true);
+  // const [disableRightClick, setDisableRightClick] = useState(true);
+
+  const { userType, setUserType, setIsLoggedIn } = useContext(UserContext);
+  const navigate = useNavigate();
   const imageRef = useRef(null);
 
-  useEffect(() => {
-    const preventRightClick = (e) => {
-      if (disableRightClick) {
-        e.preventDefault();
-      }
-    };
-
-    const image = imageRef.current;
-
-    // Check if the image element exists before adding the event listener
-    if (image) {
-      image.addEventListener("contextmenu", preventRightClick);
-
-      // Clean up the event listener when the component unmounts
-      return () => {
-        image.removeEventListener("contextmenu", preventRightClick);
-      };
-    }
-  }, [disableRightClick]);
-
+  const handleLogout = () => {
+    // Clear authentication data from localStorage
+    localStorage.removeItem("userType");
+    localStorage.removeItem("isLoggedIn");
+    // Clear userType and isLoggedIn states
+    setUserType(null);
+    setIsLoggedIn(false);
+    navigate("/UserSign");
+  };
   const navListAdmin = (
     <ul className="mt-2 mb-4 flex flex-col items-center gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ">
       <Typography
@@ -221,7 +214,11 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
               <img ref={imageRef} className="w-22 h-20" src={logo} alt="" />
             </Typography>
             <div className="hidden lg:block">
-              {isSignedUp ? navListUser : isAdmin ? navListAdmin : navListUser}
+              {userType === "user"
+                ? navListUser
+                : userType === "admin"
+                ? navListAdmin
+                : null}
             </div>
             <div className="flex justify-end gap-x-1">
               <Button
@@ -250,7 +247,7 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
                 className="hidden lg:inline-block"
               >
                 <div className="profile">
-                  <Link to="/UserSign" onClick={onlogout}>
+                  <button onClick={handleLogout}>
                     <svg
                       className="w-5 h-5"
                       viewBox="0 0 25 26"
@@ -264,7 +261,7 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
                         fill="#EE5C24"
                       />
                     </svg>
-                  </Link>
+                  </button>
                 </div>
               </Button>
             </div>
@@ -308,8 +305,14 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
           </div>
           <MobileNav open={openNav}>
             <div className="flex justify-center flex-col ">
-              {isAdmin ? navListAdmin : navListUser}
-              {isSignedUp && navListUser}
+              {/* {isAdmin ? navListAdmin : navListUser}
+              {isSignedUp && navListUser} */}
+              {/* {authentication === "admin" ? navListAdmin : navListUser} */}
+              {userType === "user"
+                ? navListUser
+                : userType === "admin"
+                ? navListAdmin
+                : null}
               <div className=" ">
                 <Button fullWidth variant="text" size="sm" className="">
                   <div className="profile">

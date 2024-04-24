@@ -1,26 +1,48 @@
 // SignIn.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import logo from "../images/Our logo-01.png";
 import { Link, useNavigate } from "react-router-dom";
 import "./Signin.css";
+import UserContext from "../UserContext";
 function AdminSign({ onSignIn }) {
   const navigate = useNavigate();
   const [animateLogo, setAnimateLogo] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { setUserType, setIsLoggedIn } = useContext(UserContext);
 
+  const handleSignIn = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/Login/Admin/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
+      });
+
+      if (response.ok) {
+        // localStorage.setItem("authentication", "admin");
+        setUserType("admin");
+        setIsLoggedIn(true);
+        navigate("/AdminPage");
+      } else {
+        // Handle sign-in failure
+        setError("Failed to sign in. Please check your credentials.");
+      }
+    } catch (error) {
+      console.error("Error occurred while signing in:", error);
+      setError("Failed to sign in. Please try again.");
+    }
+  };
   useEffect(() => {
     setAnimateLogo(true);
   }, []);
-  const handleSignIn = () => {
-    if (email === "admin@gmail.com" && password === "123456789") {
-      onSignIn(email, password);
-      navigate("/AdminPage");
-    } else {
-      setError("Invalid email or password");
-    }
-  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSignIn();

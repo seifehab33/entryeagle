@@ -76,7 +76,7 @@ function ProfileDetails() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Logic to update user data
-    const updatedUser = { ...user, ...formData };
+    // const updatedUser = { ...user, ...formData };
     console.log("Form data submitted:", formData);
     // Close the dialog after form submission
     handleOpen(null);

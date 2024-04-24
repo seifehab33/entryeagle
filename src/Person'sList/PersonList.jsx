@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Users, useUser } from "./Person'sList";
-import ProfileDetails from "./ProfileDetails";
+// import { Users, useUser } from "./Person'sList";
+// import ProfileDetails from "./ProfileDetails";
 function PersonList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
