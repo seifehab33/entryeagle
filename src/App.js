@@ -52,6 +52,7 @@ function App() {
           <Route path='/PrivacyPolicy' element={<PrivacyPolicy/>}/>
           <Route path='/ContactUs' element={<ContactUs/>}/>
           <Route path="/Relatives/:id" element={<RelativesListCommunity/>}/>
+          <Route path="/ProfileDetails/:id" element={<ProfileDetails/>}/>
 
         </Routes>
         </main>
