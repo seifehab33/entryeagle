@@ -306,9 +306,6 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
           </div>
           <MobileNav open={openNav}>
             <div className="flex justify-center flex-col ">
-              {/* {isAdmin ? navListAdmin : navListUser}
-              {isSignedUp && navListUser} */}
-              {/* {authentication === "admin" ? navListAdmin : navListUser} */}
               {userType === "user"
                 ? navListUser
                 : userType === "admin"
