@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import logo from "../../images/Our logo-01.png";
 import { Link, useNavigate } from "react-router-dom";
 import "./SignUp.css";
@@ -6,6 +6,7 @@ import { Progress, Typography } from "@material-tailwind/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import UserContext from "../../UserContext";
 function SignUp({ setIsSignedUp }) {
   const navigate = useNavigate();
   const [animateLogo, setAnimateLogo] = useState(false);
@@ -22,6 +23,7 @@ function SignUp({ setIsSignedUp }) {
   const [progress, setProgress] = useState(0);
   const [isFilling, setIsFilling] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const { setUserType, setIsLoggedIn } = useContext(UserContext);
 
   useEffect(() => {
     setAnimateLogo(true);
@@ -43,10 +45,7 @@ function SignUp({ setIsSignedUp }) {
   const handleDateChange = (date) => {
     setDateOfBirth(date);
   };
-  const handleFinished = () => {
-    setIsSignedUp(true);
-    navigate("/UserPage");
-  };
+
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
     console.log("Image uploaded:", selectedImage);
@@ -103,8 +102,10 @@ function SignUp({ setIsSignedUp }) {
 
         if (response.status === 200) {
           console.log("Data sent successfully:", response.data);
-          localStorage.setItem("firstname", firstname); // Set name in localStorage
-          handleFinished();
+          localStorage.setItem("firstname", firstname);
+          setUserType("user");
+          setIsLoggedIn(true); // Set name in localStorage
+          navigate("/UserPage");
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {
