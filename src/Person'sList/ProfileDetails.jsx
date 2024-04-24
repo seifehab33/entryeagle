@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { Users } from "./Person'sList";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -25,8 +24,6 @@ function ProfileDetails() {
     PhoneNumber: "",
   });
 
-  // const formattedFName = formData?.first_name?.replace(/\s/g, "_") || "";
-  // const formattedLName = formData?.last_name?.replace(/\s/g, "_") || "";
   const formattedName = `${user.first_name}_${user.last_name}`;
 
   const navigate = useNavigate();
