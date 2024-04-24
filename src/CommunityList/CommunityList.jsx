@@ -1,29 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { CommunityTable } from "./CommunityData";
 import { Typography, Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 function CommunityList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Change this value to adjust items per page
-  const [users, setUsers] = useState(CommunityTable);
+  const [itemsPerPage] = useState(5);
   const [communities, setCommunities] = useState([]);
 
   const navigate = useNavigate();
-  // Filter users based on the search query and host
-  const filteredUsers = users.filter(
-    (user) =>
-      user.Host.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.HostEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.Relatives.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Logic to calculate pagination
   const indexOfLastUser = currentPage * itemsPerPage;
-  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const handleShowRelatives = (id) => {
-    // Navigate to the Relatives page with the id as a parameter
     navigate(`/Relatives/${id}`);
   };
   // Change page
@@ -31,7 +17,7 @@ function CommunityList() {
   useEffect(() => {
     const fetchCommunities = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/communities/"); // Replace this with your actual API endpoint
+        const response = await fetch("http://127.0.0.1:8000/communities/");
         if (!response.ok) {
           throw new Error("Failed to fetch communities");
         }
@@ -44,6 +30,12 @@ function CommunityList() {
 
     fetchCommunities();
   }, []);
+  const filteredUsers = communities.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.Community_ID.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex flex-col gap-7 mt-5 px-8 mb-5">
       <div className="heading-relatives">

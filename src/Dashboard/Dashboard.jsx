@@ -1,53 +1,32 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import cameraview from "../images/camera-view.jpeg";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./Dashboard.css";
 
 function Dashboard() {
-  const [selectedDate, setSelectedDate] = useState(new Date()); // State for selected date
-  const [searchText, setSearchText] = useState(""); // State for search bar
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [searchText, setSearchText] = useState("");
   const [userTable, setuserTable] = useState([]);
   const [cameras, setCameras] = useState([]);
-  const[frames,setFrames]=useState(null)
+  const [camera_index, setcameraindex] = useState(0);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
-  const[camera_index,setcameraindex]=useState(0)
   const handleDateChange = (date) => {
-    setSelectedDate(date); // Update selected date when a new date is selected
+    setSelectedDate(date);
   };
-//   useEffect(()=>{
-    
-//     const fetchCameras = async () => {
-//       try {
-//         const response = await fetch(`http://localhost:5000/video_feed/${camera_index}`);
-//         if (!response.ok) {
-//           throw new Error("Failed to fetch cameras");
-//         }
-//         const data = await response.blob();
-//         setFrames(URL.createObjectURL(data))
-//       } catch (error) {
-//         console.error("Error fetching cameras:", error);
-//       }
-//     };
-//   const interval = setInterval(fetchCameras,1000)
-//   return ()=>clearInterval(interval)
-// },[camera_index])
-useEffect(() => {
-  const fetchCameraList = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/cameras');
-      setCameras(response.data);
-    } catch (error) {
-      console.error("Error fetching camera list:", error); // Log the error to console
-      setSpinnerVisible(true); // Show the spinner on error
-
-    }
-  };
-  fetchCameraList();
-}, []);
-
+  useEffect(() => {
+    const fetchCameraList = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/cameras");
+        setCameras(response.data);
+      } catch (error) {
+        console.error("Error fetching camera list:", error); // Log the error to console
+        setSpinnerVisible(true); // Show the spinner on error
+      }
+    };
+    fetchCameraList();
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,22 +41,6 @@ useEffect(() => {
 
     fetchData();
   }, []);
-
-  const userData = [
-    {
-      user: "John Doe",
-      date: "2024-02-14",
-      checkInTime: "09:00 AM",
-      checkOutTime: "05:00 PM",
-    },
-    {
-      user: "John Doe",
-      date: "2024-03-14",
-      checkInTime: "10:00 AM",
-      checkOutTime: "07:00 PM",
-    },
-    // Add more user data as needed
-  ];
 
   const filteredUserData = userTable.filter((user) =>
     user.person.toLowerCase().includes(searchText.toLowerCase())
@@ -143,15 +106,15 @@ useEffect(() => {
               id="camera"
               className="options px-2 rounded-md"
               value={camera_index}
-              onChange={(e)=>{setcameraindex(parseInt(e.target.value))}}
+              onChange={(e) => {
+                setcameraindex(parseInt(e.target.value));
+              }}
             >
               <option value={0}>1</option>
               <option value={1}>2</option>
             </select>
             <p>{cameras}</p>
             <p>{camera_index}</p>
-
-
           </div>
         </div>
                     <div className="camera-view">
@@ -211,7 +174,6 @@ useEffect(() => {
           </table>
         </div>
       </div>
-      {/* Calendar */}
       <div className="calendar flex justify-center lg:w-1/3 order-1  lg:flex-1 lg:block lg:order-2 lg:mt-[100px] ">
         <Calendar
           onChange={handleDateChange} // Handle date change event
@@ -271,5 +233,3 @@ useEffect(() => {
 }
 
 export default Dashboard;
-
-

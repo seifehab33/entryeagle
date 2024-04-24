@@ -41,7 +41,7 @@ function Signin({ onSignIn }) {
       >
         <img src={logo} className="w-[360px]" alt="" />
       </div>
-      <div class="vertical-line h-[0.5px] w-[400px] lg:h-[400px] lg:w-0"></div>
+      <div className="vertical-line h-[0.5px] w-[400px] lg:h-[400px] lg:w-0"></div>
       <div className="form">
         <div className="flex flex-col gap-4 mb-4">
           <h1 className="text-4xl font-extrabold text-center text-[#494949]">

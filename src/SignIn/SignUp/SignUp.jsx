@@ -16,9 +16,6 @@ function SignUp({ setIsSignedUp }) {
   const [UserName, setUserName] = useState("");
   const [image, setImage] = useState(null);
   const [dateOfBirth, setDateOfBirth] = useState("");
-  const [dayOfBirth, setDayOfBirth] = useState("");
-  const [monthOfBirth, setMonthOfBirth] = useState("");
-  const [yearOfBirth, setYearOfBirth] = useState("");
   const [repassword, setRePassword] = useState("");
   const [error, setError] = useState("");
   const [showFormSignUp, setShowFormSignUp] = useState(false);
@@ -45,16 +42,6 @@ function SignUp({ setIsSignedUp }) {
   };
   const handleDateChange = (date) => {
     setDateOfBirth(date);
-    if (date) {
-      const [year, month, day] = date.toISOString().split("T")[0].split("-");
-      setYearOfBirth(year);
-      setMonthOfBirth(month);
-      setDayOfBirth(day);
-    } else {
-      setYearOfBirth("");
-      setMonthOfBirth("");
-      setDayOfBirth("");
-    }
   };
   const handleFinished = () => {
     setIsSignedUp(true);
@@ -83,37 +70,13 @@ function SignUp({ setIsSignedUp }) {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   handleSignUp(); // Check passwords match
-  //   if (!error) {
-  //     try {
-  //       const response = await axios.post("http://127.0.0.1:8000/Signup/", {
-  //         email,
-  //         password,
-  //         username: UserName,
-  //         last_name: lastname,
-  //         first_name: firstname,
-  //         dateOfBirth: dateOfBirth
-  //           ? dateOfBirth.toISOString().split("T")[0]
-  //           : "",
-  //         image,
-  //       });
-  //       console.log("Data sent successfully:", response.data);
-  //       handleFinished(); // Handle successful signup
-  //     } catch (error) {
-  //       console.error("Error sending data:", error);
-  //       console.log(dateOfBirth);
-  //     }
-  //   }
-  // };
   const handleGoBack = () => {
     setShowFormSignUp(false);
     setError("");
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    handleSignUp(); // Check passwords match
+    handleSignUp();
     if (!error) {
       try {
         const formData = new FormData();
@@ -354,18 +317,7 @@ function SignUp({ setIsSignedUp }) {
                         className="hidden"
                         onChange={handleImageChange}
                       />
-                      {/* {image && (
-                        <div className="mb-6">
-                          <h4 className="mb-2 text-lg font-semibold text-gray-700">
-                            Selected Image:
-                          </h4>
-                          <img
-                            src={URL.createObjectURL(image)}
-                            alt="Selected"
-                            className="max-w-full h-auto"
-                          />
-                        </div>
-                      )} */}
+
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-6 w-6 text-gray-500"
