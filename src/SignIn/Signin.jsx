@@ -7,7 +7,7 @@ import "./Signin.css";
 function Signin({ onSignIn }) {
   const navigate = useNavigate();
   const [animateLogo, setAnimateLogo] = useState(false);
-  const [email, setEmail] = useState("");
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { setUserType, setIsLoggedIn } = useContext(UserContext);
@@ -20,7 +20,7 @@ function Signin({ onSignIn }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: email,
+          username: username,
           password: password,
         }),
       });
@@ -28,7 +28,7 @@ function Signin({ onSignIn }) {
       if (response.ok) {
         setUserType("user");
         setIsLoggedIn(true);
-        localStorage.setItem("firstname", email);
+        localStorage.setItem("firstname", username);
         navigate("/UserPage");
       } else {
         // Handle sign-in failure
@@ -44,7 +44,7 @@ function Signin({ onSignIn }) {
   }, []);
   useEffect(() => {
     setError("");
-  }, [email, password]);
+  }, [username, password]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -77,9 +77,9 @@ function Signin({ onSignIn }) {
           <input
             type="email"
             className="p-2 placeholder-[#EE5C24] rounded-lg"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="UserName"
+            value={username}
+            onChange={(e) => setUserName(e.target.value)}
             onKeyDown={handleKeyDown}
           />
           <input

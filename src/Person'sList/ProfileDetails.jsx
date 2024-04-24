@@ -14,7 +14,7 @@ import "./Person'sList.css";
 function ProfileDetails() {
   const { ComId, id } = useParams();
   const [user, setUser] = useState([]);
-  const [size, setSize] = useState(null); // Added state for size
+  const [size, setSize] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     ID: "",
