@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import cameraview from "../images/camera-view.jpeg";
@@ -153,13 +154,12 @@ useEffect(() => {
 
           </div>
         </div>
-        {cameras.map((cameraId, index) => (
-                    <div className="camera-view" key={index}>
+                    <div className="camera-view">
                         <h2>Camera {camera_index}</h2>
                         <img
                             src={`http://localhost:5000/video_feed/${camera_index}`}
-                            alt={`Camera Feed ${cameraId}`}
-                            style={{ width: '60%' }}
+                            // alt={`Camera Feed ${cameraId}`}
+                            style={{ width: '40%' }}
                             onError={(e) => {
                               e.target.style.display = 'none'; // Hide the image on error
                               setSpinnerVisible(true); // Show the spinner on error
@@ -167,11 +167,9 @@ useEffect(() => {
                             onLoad={() => {
                               setSpinnerVisible(false); // Hide the spinner when the image loads
                           }}
-                          
                         />
-                   
                     </div>
-                ))}
+
                  {spinnerVisible && (
               <div className="flex justify-center items-center h-full">
                   <div className="animate-spin rounded-full border-t-4 border-gray-200 h-20 w-20"></div>
