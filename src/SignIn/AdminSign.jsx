@@ -27,8 +27,12 @@ function AdminSign({ onSignIn }) {
 
       if (response.ok) {
         // localStorage.setItem("authentication", "admin");
+        const responseData = await response.json(); // Parse response body as JSON
+        const { admin_name, Admin_id } = responseData.data;
         setUserType("admin");
         setIsLoggedIn(true);
+        localStorage.setItem("Admin_id", Admin_id);
+        localStorage.setItem("Admin_Name", admin_name);
         navigate("/AdminPage");
       } else {
         // Handle sign-in failure

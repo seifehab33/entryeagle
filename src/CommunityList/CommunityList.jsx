@@ -30,11 +30,9 @@ function CommunityList() {
 
     fetchCommunities();
   }, []);
-  const filteredUsers = communities.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.Community_ID.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredUsers = communities.filter((user) =>
+  //   user.Community_ID.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
 
   return (
     <div className="flex flex-col gap-7 mt-5 px-8 mb-5">
@@ -72,7 +70,7 @@ function CommunityList() {
           <thead className="border-b-[2px] border-[#EE5C24] ">
             <tr>
               <th className="px-4 py-2">No</th>
-              <th className="px-4 py-2">Name</th>
+              {/* <th className="px-4 py-2">Name</th> */}
               <th className="px-4 py-2">Community Id</th>
               <th className="px-4 py-2">Relatives</th>
               <th className="px-4 py-2">Edit</th>
@@ -82,7 +80,7 @@ function CommunityList() {
             {communities.map((community, id) => (
               <tr key={id}>
                 <td className="px-4 py-2 text-center">{id + 1}</td>
-                <td className="px-4 py-2 text-center">{community.name}</td>
+                {/* <td className="px-4 py-2 text-center">{community.name}</td> */}
                 <td className="px-4 py-2 text-center">
                   {community.Community_ID}
                 </td>
@@ -121,8 +119,7 @@ function CommunityList() {
       <div className="flex items-center justify-between border-t border-blue-gray-50 p-4">
         <div>
           <Typography variant="small" className="font-normal text-gray-900">
-            Page {currentPage} of{" "}
-            {Math.ceil(filteredUsers.length / itemsPerPage)}
+            Page {currentPage} of {Math.ceil(communities.length / itemsPerPage)}
           </Typography>
         </div>
         <div className="flex gap-2">
@@ -139,7 +136,7 @@ function CommunityList() {
             variant="outlined"
             size="sm"
             onClick={() => paginate(currentPage + 1)}
-            disabled={indexOfLastUser >= filteredUsers.length}
+            disabled={indexOfLastUser >= communities.length}
             className="text-[#ee5c24] border-[#ee5c24]"
           >
             Next
