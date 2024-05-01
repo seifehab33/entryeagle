@@ -15,13 +15,18 @@ function ProfileDetails() {
   const { ComId, id } = useParams();
   const [user, setUser] = useState([]);
   const [size, setSize] = useState(null);
+  const [responseEdit, setResponseEdit] = useState(null);
+  const [image, setImage] = useState(null);
+  const [selectedFileName, setSelectedImageName] = useState("");
   const [formData, setFormData] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     ID: "",
     BirthDate: "",
     Email: "",
     Address: "",
     PhoneNumber: "",
+    photo_url: "",
   });
 
   const formattedName = `${user.first_name}_${user.last_name}`;
@@ -42,10 +47,12 @@ function ProfileDetails() {
         setUser(response.data);
         console.log(response.data);
         setFormData({
-          name: response.data.first_name,
+          first_name: response.data.first_name,
+          last_name: response.data.last_name,
           ID: response.data.id,
           BirthDate: response.data.birth_date,
           Email: response.data.email,
+          photo_url: response.data.photo_url,
         });
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -54,6 +61,7 @@ function ProfileDetails() {
 
     fetchUser();
   }, [id]);
+
   const removeUserFromCommunity = async () => {
     try {
       const response = await axios.post(
@@ -73,14 +81,28 @@ function ProfileDetails() {
       // Handle error, maybe show an error message to the user
     }
   };
-  const handleSubmit = (e) => {
+  const handleEdit = async (e) => {
     e.preventDefault();
-    // Logic to update user data
-    // const updatedUser = { ...user, ...formData };
-    console.log("Form data submitted:", formData);
-    // Close the dialog after form submission
-    handleOpen(null);
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/person/${id}/edit/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      setResponseEdit(data);
+      // Logic to update user data
+      // const updatedUser = { ...user, ...formData };
+      console.log("Form data submitted:", formData);
+      // Close the dialog after form submission
+      handleOpen(null);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
+  const handleSubmit = (e) => {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,6 +111,12 @@ function ProfileDetails() {
       [name]: value,
     });
   };
+  const handleImageChange = (e) => {
+    const image = e.target.files[0];
+    setImage(image);
+    setSelectedImageName(image.name);
+  };
+
   if (!user) {
     return <p>User not found</p>;
   }
@@ -98,12 +126,14 @@ function ProfileDetails() {
       <div className="heading-details flex md:flex-row lg:flex-row flex-col gap-2 justify-between mb-5 lg:mb-8">
         <div className="flex flex-col gap-2 md:flex-row lg:flex-row lg:gap-8">
           <img
-            src={`http://127.0.0.1:8000/${user.photo_url}`}
+            src={`http://127.0.0.1:8000/${formData.photo_url}`}
             alt="userimg"
             className="h-[250px] w-[250px] rounded-full drop-shadow-xl shadow-gray-600"
           />
           <div className="">
-            <p className="font-bold text-4xl capitalize">{user.first_name}</p>
+            <p className="font-bold text-4xl capitalize">
+              {formData.first_name}
+            </p>
             <p>@{formattedName}</p>
           </div>
         </div>
@@ -120,14 +150,14 @@ function ProfileDetails() {
         <div className="flex flex-col gap-2">
           <p>
             {" "}
-            <span>FirstName:</span> {user.first_name}
+            <span>FirstName:</span> {formData.first_name}
           </p>
           <p>
             {" "}
-            <span>LastName:</span> {user.last_name}
+            <span>LastName:</span> {formData.last_name}
           </p>
           <p>
-            <span>ID:</span> {user.id}
+            <span>ID:</span> {formData.ID}
           </p>
         </div>
         <div className="flex flex-col gap-2">
@@ -138,13 +168,13 @@ function ProfileDetails() {
             <span>Address:</span> {user.Address}
           </p> */}
           <p>
-            <span>Email:</span> {user.email}
+            <span>Email:</span> {formData.Email}
           </p>
           <p>
             <span>CommunityId:</span> 12345
           </p>
           <p>
-            <span>BirthDate:</span> {user.birth_date}
+            <span>BirthDate:</span> {formData.BirthDate}
           </p>
         </div>
       </div>
@@ -175,31 +205,36 @@ function ProfileDetails() {
       >
         <DialogHeader>Update Profile</DialogHeader>
         <DialogBody>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleEdit}>
             <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Change Image
-                </label>
-                <button className="p-1 px-2 bg-[#EE5C24] text-white text-sm rounded-xl">
-                  Choose File
-                </button>
-              </div>
               <div>
                 <label
-                  htmlFor="name"
+                  htmlFor="firstname"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Name
+                  FirstName
                 </label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
+                  id="firstname"
+                  name="first_name"
+                  value={formData.first_name}
+                  onChange={handleChange}
+                  className="mt-1 p-2 rounded-md border border-solid border-[#EE5C24] focus:border focus:border-solid focus:border-[#EE5C24]  block w-full shadow-sm sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="LastName"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  LastName
+                </label>
+                <input
+                  type="text"
+                  id="lastname"
+                  name="last_name"
+                  value={formData.last_name}
                   onChange={handleChange}
                   className="mt-1 p-2 rounded-md border border-solid border-[#EE5C24] focus:border focus:border-solid focus:border-[#EE5C24]  block w-full shadow-sm sm:text-sm"
                 />
@@ -217,6 +252,7 @@ function ProfileDetails() {
                   name="ID"
                   value={formData.ID}
                   onChange={handleChange}
+                  readOnly
                   className="mt-1 p-2 rounded-md border border-solid border-[#EE5C24] focus:border focus:border-solid focus:border-[#EE5C24]  block w-full shadow-sm sm:text-sm"
                 />
               </div>
@@ -230,7 +266,7 @@ function ProfileDetails() {
                 <input
                   type="text"
                   id="BirthDate"
-                  name="BirthDate"
+                  name="birth_date"
                   value={formData.BirthDate}
                   onChange={handleChange}
                   className="mt-1 p-2 rounded-md border border-solid border-[#EE5C24] focus:border focus:border-solid focus:border-[#EE5C24]  block w-full shadow-sm sm:text-sm"
@@ -252,49 +288,18 @@ function ProfileDetails() {
                   className="mt-1 p-2 rounded-md border border-solid border-[#EE5C24] focus:border focus:border-solid focus:border-[#EE5C24]  block w-full shadow-sm sm:text-sm"
                 />
               </div>
-              <div>
-                <label
-                  htmlFor="Address"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Address
-                </label>
-                <input
-                  type="text"
-                  id="Address"
-                  name="Address"
-                  value={formData.Address}
-                  onChange={handleChange}
-                  className="mt-1 p-2 rounded-md border border-solid border-[#EE5C24] focus:border focus:border-solid focus:border-[#EE5C24]  block w-full shadow-sm sm:text-sm"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="PhoneNumber"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  PhoneNumber
-                </label>
-                <input
-                  type="text"
-                  id="PhoneNumber"
-                  name="PhoneNumber"
-                  value={formData.PhoneNumber}
-                  onChange={handleChange}
-                  className="mt-1 p-2 rounded-md border border-solid border-[#EE5C24] focus:border focus:border-solid focus:border-[#EE5C24] block w-full shadow-sm sm:text-sm"
-                />
-              </div>
+
               {/* Add more input fields here */}
             </div>
             <DialogFooter>
-              <Button
+              {/* <Button
                 variant="text"
                 color="red"
                 onClick={() => handleOpen(null)}
                 className="mr-1"
               >
                 <span>Cancel</span>
-              </Button>
+              </Button> */}
               <Button variant="" type="submit" className="bg-[#EE5C24]">
                 <span>Confirm</span>
               </Button>
