@@ -4,13 +4,12 @@ import axios from "axios";
 
 function UserHome() {
   const [showFirstTwoStats, setShowFirstTwoStats] = useState(true);
+  const [showCommunityBox, setShowCommunityBox] = useState(false);
+  const [relativesCount, setRelativesCount] = useState(0);
 
   const [communityId, setCommunityId] = useState("");
-  const [communityname, setCommunityname] = useState("");
   const [userName, setUserName] = useState("");
-  const handleAdvance = () => {
-    setShowFirstTwoStats(false);
-  };
+
   const navigate = useNavigate();
   const handlenavigate = () => {
     navigate("/Relatives'List");
@@ -22,23 +21,48 @@ function UserHome() {
       setUserName(name);
     }
   }, []);
+
   const handleCreateCommunity = async () => {
     try {
       // Make sure to replace 'your-api-endpoint' with the actual endpoint
       const response = await axios.post(
         "http://127.0.0.1:8000/communities/create/",
-        { community_id: parseInt(communityId, 10), name: communityname }
+        { community_id: parseInt(communityId, 10) }
       );
       console.log(response.data);
       console.log("Community created:", response.data);
       // Optionally, you can handle the response data or show a success message to the user
-      setCommunityname("");
       setCommunityId("");
+      setCommunityId(response.data.Community_ID);
+      setShowCommunityBox(true);
       setShowFirstTwoStats(false);
+      localStorage.setItem("CommunityId", communityId);
     } catch (error) {
       console.error("Error creating community:", error);
       // Optionally, you can handle errors or show an error message to the user
     }
+  };
+
+  useEffect(() => {
+    const fetchRelativesCount = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/users-in-community/${communityId}/`
+        );
+        if (response.data) {
+          setRelativesCount(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching relatives count:", error);
+      }
+    };
+
+    fetchRelativesCount();
+  }, [communityId]);
+  const numberOfUsers = relativesCount.length;
+  const handleAdvance = () => {
+    setShowFirstTwoStats(false);
+    localStorage.setItem("CommunityId", communityId);
   };
   return (
     <div className="home gap-y-1 lg:px-8 px-4 mt-[50px] lg:mt-[90px] mb-[40px]">
@@ -54,11 +78,13 @@ function UserHome() {
                 <input
                   type="text"
                   placeholder="Enter Community Id"
+                  onChange={(e) => setCommunityId(e.target.value)}
                   className="rounded-xl w-[250px] placeholder:text-sm text-center text-black placeholder:text-[#F7982C]"
                 />
                 <button
                   className="bg-white rounded-xl text-[#F7982C] px-2 text-sm"
                   onClick={handleAdvance}
+                  disabled={!communityId.trim()}
                 >
                   Advance
                 </button>
@@ -68,26 +94,13 @@ function UserHome() {
               <span>Create Community Id</span>
               <span className="flex justify-between">
                 <div className="flex gap-3 flex-col px-3 text-sm text-center text-black">
-                  <input
-                    type="number"
-                    className="p-[1px] rounded-md"
-                    placeholder="Create Community ID"
-                    value={communityId}
-                    onChange={(e) => setCommunityId(e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Create Name Community"
-                    className="p-[1px] rounded-md"
-                    value={communityname}
-                    onChange={(e) => setCommunityname(e.target.value)}
-                  />
+                  {/* <div className="rounded-md">{communityId}</div> */}
                 </div>
                 <button
                   className="bg-white rounded-xl text-[#F7982C] px-2 text-sm"
                   onClick={handleCreateCommunity}
                 >
-                  Create
+                  Generate
                 </button>
               </span>
             </div>
@@ -96,17 +109,22 @@ function UserHome() {
           <>
             <div className="third-stat stat sm:w-full md:w-[300px] lg:w-[400px] rounded-md">
               <span>Relatives</span>
-              <span>Number of Relatives : 6 </span>
-            </div>
-            <div className="fourth-stat stat sm:w-full md:w-[300px] lg:w-[400px] rounded-md">
-              <span>Show Your Relative</span>
-              <span className="flex justify-end">
+              <div className="flex justify-between">
+                <span>Number of Relatives : {numberOfUsers} </span>
                 <button
                   className="bg-white px-8 rounded-md text-[#F7982C] text-sm "
                   onClick={handlenavigate}
                 >
                   Show
                 </button>
+              </div>
+            </div>
+            <div className="fourth-stat stat sm:w-full md:w-[300px] lg:w-[400px] rounded-md">
+              <span>Your Community Id</span>
+              <span className="flex justify-end">
+                <div className="bg-white px-8 rounded-md text-[#F7982C] text-sm ">
+                  <div className="rounded-md">{communityId}</div>
+                </div>
               </span>
             </div>
           </>
