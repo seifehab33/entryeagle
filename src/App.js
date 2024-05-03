@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './Home/Home';
 import Dashboard from './Dashboard/Dashboard';
 import Welcome from './Welcome/Welcome';
@@ -20,47 +21,49 @@ import AboutUs from './Home/AboutUs/AboutUs';
 import PrivacyPolicy from './Home/PrivacyPolicy/PrivacyPolicy';
 import ContactUs from './Home/ContactUs/ContactUs';
 import RelativesListCommunity from './CommunityList/Relative\'sListCommunity';
-import { UserProvider } from './UserContext';
+import { UserProvider, useUser } from './UserContext'; // Assuming you have a UserContext
 
-function App() {
-
-
+const App = () => {
 
   return (
     <div className='App flex flex-col min-h-screen '>
-      <UserProvider>
       <Router>
-        {<NavbarDefault />}
+        <UserProvider>
+        <NavbarDefault />
         <main className='flex-grow '>
-        <Routes>
-          <Route exact path="/" element={<Welcome />} />
-          <Route exact path="/AdminPage" element={<Home />} />
-          <Route exact path="/AboutUs" element={<AboutUs />} />
-
-          <Route exact path="/UserPage" element={<UserHome />} />
-          <Route exact path="/Dashboard" element={<Dashboard />} />
-          <Route exact path="/UserSign" element={<Signin />} />
-          <Route exact path="/AdminSign" element={<AdminSign />} />
-          <Route exact path="/SignUp" element={<SignUp />}/>
-          <Route exact path="/FormSignUp" element={<FormSignUp/>}/>
-          <Route exact path="/Relatives'List" element={<RelativesList/>}/>
-          <Route exact path="/Relatives'List/user/:id" element={<UserDetails/>}/>
-          <Route exact path="/Person'sList" element={<PersonList/>}/>
-          <Route path="/ProfileDetails/:ComId/:id" element={<ProfileDetails/>}/>
-          <Route path="/ProfileDetails/:id/History" element={<HistoryPerson />} />
-          <Route path="/CommunityList" element={<CommunityList/>}/>
-          <Route path='/PrivacyPolicy' element={<PrivacyPolicy/>}/>
-          <Route path='/ContactUs' element={<ContactUs/>}/>
-          <Route path="/Relatives/:id" element={<RelativesListCommunity/>}/>
-          <Route path="/ProfileDetails/:id" element={<ProfileDetails/>}/>
-
-        </Routes>
+          <Routes>
+            <Route path="/" element={<Welcome />} />
+            <Route path="/AdminPage" element={<PrivateRoute component={Home} />} />
+            <Route path="/AboutUs" element={<PrivateRoute component={AboutUs} />} />
+            <Route path="/UserPage" element={<PrivateRoute component={UserHome} />} />
+            <Route path="/Dashboard" element={<PrivateRoute component={Dashboard} />} />
+            <Route path="/UserSign" element={<Signin />} />
+            <Route path="/AdminSign" element={<AdminSign />} />
+            <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/FormSignUp" element={<PrivateRoute component={FormSignUp} />} />
+            <Route path="/Relatives'List" element={<PrivateRoute component={RelativesList} />} />
+            <Route path="/Relatives'List/user/:id" element={<PrivateRoute component={UserDetails} />} />
+            <Route path="/Person'sList" element={<PrivateRoute component={PersonList} />} />
+            <Route path="/ProfileDetails/:ComId/:id" element={<PrivateRoute component={ProfileDetails} />} />
+            <Route path="/ProfileDetails/:id/History" element={<PrivateRoute component={HistoryPerson} />} />
+            <Route path="/CommunityList" element={<PrivateRoute component={CommunityList} />} />
+            <Route path='/PrivacyPolicy' element={<PrivateRoute component={PrivacyPolicy} />} />
+            <Route path='/ContactUs' element={<PrivateRoute component={ContactUs} />} />
+            <Route path="/Relatives/:id" element={<PrivateRoute component={RelativesListCommunity} />} />
+            <Route path="/ProfileDetails/:id" element={<PrivateRoute component={ProfileDetails} />} />
+          </Routes>
         </main>
-        <Footer/>
+        <Footer />
+        </UserProvider>
       </Router>
-      </UserProvider>
     </div>
   );
-}
+};
+
+const PrivateRoute = ({ component: Component }) => {
+  const { isLoggedIn } = useUser();
+
+  return isLoggedIn ? <Component /> : <Navigate to="/UserSign" />;
+};
 
 export default App;

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Users } from "./UserContext";
 import axios from "axios";
 function UserDetails() {
   const { id } = useParams();
   const [personDetails, setPersonDetails] = useState([]);
   const [LastpersonDetails, setLastPersonDetails] = useState([]);
-  const [relativesList, setRelativesList] = useState([]);
   const [personCard, setPersonCardInfo] = useState(null);
   const CommunityId = localStorage.getItem("CommunityId");
   useEffect(() => {
@@ -86,12 +84,12 @@ function UserDetails() {
               {formatDate(personCard.created_at)}
             </p>
             <p className="text-[15px] font-semibold text-gray-700 mb-3">
-              <span className="text-[#EE5C24]">Last_seen:</span>{" "}
+              <span className="text-[#EE5C24]">Last_seen: </span>{" "}
               {LastpersonDetails ? (
-                <p>
+                <span>
                   {formatDate(LastpersonDetails.checkOut_time)},
                   {LastpersonDetails.camera}
-                </p>
+                </span>
               ) : (
                 "N/A"
               )}

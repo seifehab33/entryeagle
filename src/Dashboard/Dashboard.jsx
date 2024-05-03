@@ -4,7 +4,7 @@ import axios from "axios";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./Dashboard.css";
-
+import { Link } from "react-router-dom";
 function Dashboard() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [searchText, setSearchText] = useState("");
@@ -117,27 +117,27 @@ function Dashboard() {
             <p>{camera_index}</p>
           </div>
         </div>
-                    <div className="camera-view">
-                        <h2>Camera {camera_index}</h2>
-                        <img
-                            src={`http://localhost:5000/video_feed/${camera_index}`}
-                            // alt={`Camera Feed ${cameraId}`}
-                            style={{ width: '40%' }}
-                            onError={(e) => {
-                              e.target.style.display = 'none'; // Hide the image on error
-                              setSpinnerVisible(true); // Show the spinner on error
-                            }}
-                            onLoad={() => {
-                              setSpinnerVisible(false); // Hide the spinner when the image loads
-                          }}
-                        />
-                    </div>
+        <div className="camera-view">
+          <h2>Camera {camera_index}</h2>
+          <img
+            src={`http://localhost:5000/video_feed/${camera_index}`}
+            // alt={`Camera Feed ${cameraId}`}
+            style={{ width: "40%" }}
+            onError={(e) => {
+              e.target.style.display = "none"; // Hide the image on error
+              setSpinnerVisible(true); // Show the spinner on error
+            }}
+            onLoad={() => {
+              setSpinnerVisible(false); // Hide the spinner when the image loads
+            }}
+          />
+        </div>
 
-                 {spinnerVisible && (
-              <div className="flex justify-center items-center h-full">
-                  <div className="animate-spin rounded-full border-t-4 border-gray-200 h-20 w-20"></div>
-              </div>
-          )}
+        {spinnerVisible && (
+          <div className="flex justify-center items-center h-full">
+            <div className="animate-spin rounded-full border-t-4 border-gray-200 h-20 w-20"></div>
+          </div>
+        )}
         <div className="">
           <table className="border-none table-camera w-full md:max-w-[920px] rounded-sm">
             <thead>
@@ -158,9 +158,16 @@ function Dashboard() {
                     <td className="text-center">{data.checkIn_time}</td>
                     <td className="text-center">{data.checkOut_time}</td>
                     <td className="flex items-center justify-center">
-                      <button className="view-button w-[5em] h-8 rounded-xl">
-                        View
-                      </button>
+                      <Link
+                        to={{
+                          pathname: `/ProfileDetails/${data.person_id}`,
+                          // Pass the users array as state
+                        }}
+                      >
+                        <button className="view-button w-[5em] h-8 rounded-xl">
+                          View
+                        </button>
+                      </Link>
                     </td>
                   </tr>
                   <tr>

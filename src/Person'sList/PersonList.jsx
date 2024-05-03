@@ -70,7 +70,8 @@ function PersonList() {
                 <img
                   src={`http://127.0.0.1:8000/${user.photo_url}`} // Prepend the base URL to the photo_url
                   alt={`person-${user.id}`}
-                  className="w-[100px] h-[100px] rounded-full mx-auto"
+                  className="w-[150px] h-[150px] rounded-full mx-auto object-cover object-top"
+                  loading="lazy"
                 />
               </div>
               <p className="text-center font-semibold text-lg mt-2 text-[#EE5C24]">

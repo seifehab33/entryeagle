@@ -3,14 +3,19 @@ import React, { useEffect, useState, useContext } from "react";
 import logo from "../images/Our logo-01.png";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../UserContext";
+import { useLocation } from "react-router-dom";
+
 import "./Signin.css";
-function Signin({ onSignIn }) {
+
+function Signin() {
   const navigate = useNavigate();
+
   const [animateLogo, setAnimateLogo] = useState(false);
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { setUserType, setIsLoggedIn } = useContext(UserContext);
+  const { setUserType, setIsLoggedIn, login } = useContext(UserContext);
+  const location = useLocation();
 
   const handleSignIn = async () => {
     try {
@@ -26,22 +31,29 @@ function Signin({ onSignIn }) {
       });
 
       if (response.ok) {
+        // Set user type and log in status
         setUserType("user");
         setIsLoggedIn(true);
+        login("user");
         localStorage.setItem("firstname", username);
+        // Redirect to UserPage
         navigate("/UserPage");
       } else {
         // Handle sign-in failure
         setError("Failed to sign in. Please check your credentials.");
       }
     } catch (error) {
-      console.error("Error occurred while signing in:", error);
       setError("Failed to sign in. Please try again.");
     }
   };
   useEffect(() => {
     setAnimateLogo(true);
   }, []);
+  useEffect(() => {
+    if (location.pathname === "/UserSign") {
+      localStorage.clear();
+    }
+  }, [location.pathname]);
   useEffect(() => {
     setError("");
   }, [username, password]);

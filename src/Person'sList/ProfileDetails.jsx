@@ -15,9 +15,6 @@ function ProfileDetails() {
   const { ComId, id } = useParams();
   const [user, setUser] = useState([]);
   const [size, setSize] = useState(null);
-  const [responseEdit, setResponseEdit] = useState(null);
-  const [image, setImage] = useState(null);
-  const [selectedFileName, setSelectedImageName] = useState("");
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -91,18 +88,14 @@ function ProfileDetails() {
         },
         body: JSON.stringify(formData),
       });
-      const data = await response.json();
-      setResponseEdit(data);
-      // Logic to update user data
-      // const updatedUser = { ...user, ...formData };
+
       console.log("Form data submitted:", formData);
-      // Close the dialog after form submission
+
       handleOpen(null);
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  const handleSubmit = (e) => {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -110,11 +103,6 @@ function ProfileDetails() {
       ...formData,
       [name]: value,
     });
-  };
-  const handleImageChange = (e) => {
-    const image = e.target.files[0];
-    setImage(image);
-    setSelectedImageName(image.name);
   };
 
   if (!user) {
@@ -128,7 +116,7 @@ function ProfileDetails() {
           <img
             src={`http://127.0.0.1:8000/${formData.photo_url}`}
             alt="userimg"
-            className="h-[250px] w-[250px] rounded-full drop-shadow-xl shadow-gray-600"
+            className="h-[300px] w-[300px] rounded-full   transition duration-300 ease-in-out transform hover:scale-105 object-cover object-center"
           />
           <div className="">
             <p className="font-bold text-4xl capitalize">

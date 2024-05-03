@@ -18,7 +18,8 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
   const SignUp = location.pathname === "/SignUp";
   const Welcome = location.pathname === "/";
 
-  const { userType, setUserType, setIsLoggedIn } = useContext(UserContext);
+  const { userType, setUserType, setIsLoggedIn, logout } =
+    useContext(UserContext);
   const navigate = useNavigate();
   const imageRef = useRef(null);
 
@@ -27,6 +28,13 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
     localStorage.removeItem("userType");
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("firstname");
+    localStorage.removeItem("token");
+    localStorage.removeItem("CommunityId");
+    localStorage.removeItem("Admin_Name");
+    localStorage.removeItem("Admin_id");
+    document.cookie =
+      "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    logout();
     // Clear userType and isLoggedIn states
     setUserType(null);
     setIsLoggedIn(false);

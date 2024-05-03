@@ -4,9 +4,8 @@ import axios from "axios";
 
 function UserHome() {
   const [showFirstTwoStats, setShowFirstTwoStats] = useState(true);
-  const [showCommunityBox, setShowCommunityBox] = useState(false);
   const [relativesCount, setRelativesCount] = useState(0);
-
+  const [error, setError] = useState("");
   const [communityId, setCommunityId] = useState("");
   const [userName, setUserName] = useState("");
 
@@ -14,6 +13,7 @@ function UserHome() {
   const handlenavigate = () => {
     navigate("/Relatives'List");
   };
+
   useEffect(() => {
     // Retrieve name from localStorage when component mounts
     const name = localStorage.getItem("firstname");
@@ -34,12 +34,27 @@ function UserHome() {
       // Optionally, you can handle the response data or show a success message to the user
       setCommunityId("");
       setCommunityId(response.data.Community_ID);
-      setShowCommunityBox(true);
       setShowFirstTwoStats(false);
       localStorage.setItem("CommunityId", communityId);
     } catch (error) {
       console.error("Error creating community:", error);
       // Optionally, you can handle errors or show an error message to the user
+    }
+  };
+  const handleCheckCommunity = async (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    try {
+      const response = await axios.post(
+        "	http://127.0.0.1:8000/communities/check/",
+        {
+          community_id: communityId,
+        }
+      );
+      setShowFirstTwoStats(false);
+      localStorage.setItem("CommunityId", communityId);
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+      setError("The community id doesn't exist");
     }
   };
 
@@ -60,9 +75,9 @@ function UserHome() {
     fetchRelativesCount();
   }, [communityId]);
   const numberOfUsers = relativesCount.length;
-  const handleAdvance = () => {
-    setShowFirstTwoStats(false);
-    localStorage.setItem("CommunityId", communityId);
+  const handleInputChange = (event) => {
+    setCommunityId(event.target.value);
+    setError("");
   };
   return (
     <div className="home gap-y-1 lg:px-8 px-4 mt-[50px] lg:mt-[90px] mb-[40px]">
@@ -78,18 +93,20 @@ function UserHome() {
                 <input
                   type="text"
                   placeholder="Enter Community Id"
-                  onChange={(e) => setCommunityId(e.target.value)}
+                  value={communityId}
+                  onChange={handleInputChange}
                   className="rounded-xl w-[250px] placeholder:text-sm text-center text-black placeholder:text-[#F7982C]"
                 />
                 <button
                   className="bg-white rounded-xl text-[#F7982C] px-2 text-sm"
-                  onClick={handleAdvance}
+                  onClick={handleCheckCommunity}
                   disabled={!communityId.trim()}
                 >
                   Advance
                 </button>
               </span>
             </div>
+
             <div className="second-stat stat sm:w-full md:w-[300px] lg:w-[400px] rounded-md">
               <span>Create Community Id</span>
               <span className="flex justify-between">
@@ -104,6 +121,9 @@ function UserHome() {
                 </button>
               </span>
             </div>
+            {error && (
+              <div className="text-red-900 text-sm capitalize ">{error}</div>
+            )}
           </>
         ) : (
           <>

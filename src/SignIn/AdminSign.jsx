@@ -10,7 +10,7 @@ function AdminSign({ onSignIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { setUserType, setIsLoggedIn } = useContext(UserContext);
+  const { setUserType, setIsLoggedIn, login } = useContext(UserContext);
 
   const handleSignIn = async () => {
     try {
@@ -31,6 +31,7 @@ function AdminSign({ onSignIn }) {
         const { admin_name, Admin_id } = responseData.data;
         setUserType("admin");
         setIsLoggedIn(true);
+        login("admin");
         localStorage.setItem("Admin_id", Admin_id);
         localStorage.setItem("Admin_Name", admin_name);
         navigate("/AdminPage");
