@@ -5,12 +5,11 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [userType, setUserType] = useState(localStorage.getItem('userType') || null);
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true' || false);
-  // const [token, setToken] = useState(localStorage.getItem('token') || null);
 
   useEffect(() => {
     localStorage.setItem('userType', userType);
     localStorage.setItem('isLoggedIn', isLoggedIn);
-  }, [userType, isLoggedIn]); // if app is not working , here is token
+  }, [userType, isLoggedIn]); 
 
   const login = ( newUserType) => {
     setUserType(newUserType);
@@ -21,9 +20,8 @@ export const UserProvider = ({ children }) => {
     setUserType(null);
     setIsLoggedIn(false);
   };
-//if app is not working , here is token in UserContext
   return (
-    <UserContext.Provider value={{ userType, setUserType, isLoggedIn, setIsLoggedIn, login, logout }}> ; 
+    <UserContext.Provider value={{ userType, setUserType, isLoggedIn, setIsLoggedIn, login, logout }}>
       {children}
     </UserContext.Provider>
   );

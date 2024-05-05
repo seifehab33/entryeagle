@@ -21,12 +21,13 @@ import AboutUs from './Home/AboutUs/AboutUs';
 import PrivacyPolicy from './Home/PrivacyPolicy/PrivacyPolicy';
 import ContactUs from './Home/ContactUs/ContactUs';
 import RelativesListCommunity from './CommunityList/Relative\'sListCommunity';
-import { UserProvider, useUser } from './UserContext'; // Assuming you have a UserContext
+import { UserProvider, useUser } from './UserContext'; 
 
 const App = () => {
 
   return (
-    <div className='App flex flex-col min-h-screen '>
+    <div className='App flex flex-col min-h-screen'>
+      
       <Router>
         <UserProvider>
         <NavbarDefault />
@@ -57,8 +58,8 @@ const App = () => {
         </UserProvider>
       </Router>
     </div>
-  );
-};
+  )
+}
 
 const PrivateRoute = ({ component: Component }) => {
   const { isLoggedIn } = useUser();
