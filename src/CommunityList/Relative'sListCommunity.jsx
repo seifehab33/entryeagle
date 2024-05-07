@@ -145,7 +145,7 @@ function RelativesListCommunity() {
                 <img
                   src={`http://127.0.0.1:8000/${user.photo_url}`} // Prepend the base URL to the photo_url
                   alt={`person-${user.user_id}`}
-                  className="w-[100px] h-[100px] rounded-full mx-auto"
+                  className="w-[100px] h-[100px] object-cover object-top rounded-full mx-auto"
                 />
               </div>
               <p className="text-center font-semibold text-lg mt-2 text-[#EE5C24]">

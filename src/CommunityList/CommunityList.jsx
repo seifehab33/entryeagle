@@ -30,9 +30,6 @@ function CommunityList() {
 
     fetchCommunities();
   }, []);
-  // const filteredUsers = communities.filter((user) =>
-  //   user.Community_ID.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
 
   return (
     <div className="flex flex-col gap-7 mt-5 px-8 mb-5">

@@ -35,6 +35,9 @@ function Signin() {
         setUserType("user");
         setIsLoggedIn(true);
         login("user");
+        const responseData = await response.json(); // Parse response body as JSON
+        const { user_id } = responseData.data;
+        localStorage.setItem("User_Id", user_id);
         localStorage.setItem("firstname", username);
         // Redirect to UserPage
         navigate("/UserPage");

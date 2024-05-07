@@ -5,29 +5,29 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./Dashboard.css";
 import { Link } from "react-router-dom";
+import { Typography, Button } from "@material-tailwind/react";
+
 function Dashboard() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [searchText, setSearchText] = useState("");
   const [userTable, setuserTable] = useState([]);
   const [cameras, setCameras] = useState([]);
-  const [camera_index, setcameraindex] = useState(0);
+  const [camera_index, setCameraIndex] = useState(0);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+  const [averageCheckInDuration, setAverageCheckInDuration] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+
   useEffect(() => {
     const fetchCameraList = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/cameras");
         setCameras(response.data);
       } catch (error) {
-        console.error("Error fetching camera list:", error); // Log the error to console
-        setSpinnerVisible(true); // Show the spinner on error
+        console.error("Error fetching camera list:", error);
       }
     };
-    fetchCameraList();
-  }, []);
-  useEffect(() => {
+
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -39,38 +39,69 @@ function Dashboard() {
       }
     };
 
+    fetchCameraList();
     fetchData();
   }, []);
+
+  useEffect(() => {
+    // Calculate average check-in duration whenever userTable changes
+    if (userTable.length > 0) {
+      const totalDuration = userTable.reduce((acc, data) => {
+        const duration = calculateDuration(data.checkIn_time);
+        return acc + duration;
+      }, 0);
+      const average = totalDuration / userTable.length;
+      setAverageCheckInDuration((average / 60).toFixed(1)); // Round to 1 decimal place
+    } else {
+      setAverageCheckInDuration(0);
+    }
+  }, [userTable]);
 
   const filteredUserData = userTable.filter((user) =>
     user.person.toLowerCase().includes(searchText.toLowerCase())
   );
+  const totalPages = Math.ceil(filteredUserData.length / itemsPerPage);
 
-  const calculateTotalUsers = () => {
-    return filteredUserData.length;
+  // Get current items
+  const indexOfLastUser = currentPage * itemsPerPage;
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const currentUsers = filteredUserData.slice(
+    indexOfFirstUser,
+    indexOfLastUser
+  );
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const calculateTotalUsers = () => filteredUserData.length;
+
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    const date = new Date(dateString);
+    return date.toLocaleString(undefined, options);
   };
 
-  const calculateDuration = (startDateTime, endDateTime) => {
-    const startDate = new Date(startDateTime);
-    const endDate = new Date(endDateTime);
+  const calculateDuration = (dateTime) => {
+    const time = new Date(dateTime);
 
-    // Check if parsing resulted in valid dates
-    if (isNaN(startDate) || isNaN(endDate)) {
-      return null; // Return null if either date is invalid
+    if (isNaN(time.getTime())) {
+      return 0; // If invalid time, return 0 minutes
     }
 
-    // Calculate duration in milliseconds
-    const durationMs = endDate - startDate;
+    // Extract hours and minutes
+    const hour = time.getHours();
+    const minute = time.getMinutes();
 
-    // Convert duration to hours
-    const durationHours = durationMs / (1000 * 60 * 60);
+    // Convert time to minutes
+    const totalMinutes = hour * 60 + minute;
 
-    return durationHours;
+    return totalMinutes;
   };
-  const duration = calculateDuration(
-    userTable.checkIn_time,
-    userTable.checkOut_time
-  );
 
   return (
     <div className="flex flex-col py-3 px-8 gap-6 lg:flex-row ">
@@ -107,7 +138,7 @@ function Dashboard() {
               className="options px-2 rounded-md"
               value={camera_index}
               onChange={(e) => {
-                setcameraindex(parseInt(e.target.value));
+                setCameraIndex(parseInt(e.target.value));
               }}
             >
               <option value={0}>1</option>
@@ -139,7 +170,7 @@ function Dashboard() {
           </div>
         )}
         <div className="">
-          <table className="border-none table-camera w-full md:max-w-[920px] rounded-sm">
+          <table className="border-none table-camera rounded-md w-full md:max-w-[920px] ">
             <thead>
               <tr>
                 <th>Users</th>
@@ -149,14 +180,19 @@ function Dashboard() {
                 <th className="text-center">Details</th>
               </tr>
             </thead>
+
             <tbody>
-              {filteredUserData.map((data, index) => (
+              {currentUsers.map((data, index) => (
                 <React.Fragment key={index}>
                   <tr className="row-with-padding">
                     <td className="text-center capitalize">{data.person}</td>
                     <td className="text-center">{data.camera}</td>
-                    <td className="text-center">{data.checkIn_time}</td>
-                    <td className="text-center">{data.checkOut_time}</td>
+                    <td className="text-center">
+                      {formatDate(data.checkIn_time)}
+                    </td>
+                    <td className="text-center">
+                      {formatDate(data.checkOut_time)}
+                    </td>
                     <td className="flex items-center justify-center">
                       <Link
                         to={{
@@ -179,13 +215,37 @@ function Dashboard() {
               ))}
             </tbody>
           </table>
+          <div className="flex items-center justify-between border-t border-blue-gray-50 py-4 w-full md:max-w-[920px]">
+            <div>
+              <Typography variant="small" className="font-normal text-gray-900">
+                Page {currentPage} of {totalPages}
+              </Typography>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="text-[#EE5C24] border-[#ee5c24]"
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="text-[#ee5c24] border-[#ee5c24]"
+              >
+                Next
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
       <div className="calendar flex justify-center lg:w-1/3 order-1  lg:flex-1 lg:block lg:order-2 lg:mt-[100px] ">
-        <Calendar
-          onChange={handleDateChange} // Handle date change event
-          value={selectedDate} // Set selected date
-        />
+        <Calendar value={selectedDate} />
         <div className="stats-card flex gap-4 my-[30px]">
           <div className=" bg-[#e48d29] rounded-lg shadow-md flex flex-col p-2">
             <div className="text-white ">
@@ -226,11 +286,7 @@ function Dashboard() {
             </div>
             <p className="text-sm text-white mt-2">Average Check-In Duration</p>
             <p className="text-lg font-semibold">
-              {duration !== null ? (
-                <p>{duration.toFixed(1)} hours</p>
-              ) : (
-                <p>Invalid date</p>
-              )}
+              <p> {averageCheckInDuration} Hours</p>
             </p>
           </div>
         </div>

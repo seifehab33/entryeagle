@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useEffect, useState } from "react";
 import "./Navbar.css";
 import {
   Navbar,
@@ -7,12 +7,17 @@ import {
   Button,
   IconButton,
 } from "@material-tailwind/react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../images/Our logo-01.png";
 import UserContext from "../UserContext";
-export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
+export function NavbarDefault() {
   const [openNav, setOpenNav] = React.useState(false);
+  const [imageSrcAdmin, setImageSrcAdmin] = useState("");
+  const [imageSrcUser, setImageSrcUser] = useState("");
+
   const location = useLocation();
+  const AdminId = localStorage.getItem("Admin_id");
+  const UserId = localStorage.getItem("User_Id");
   const SignUser = location.pathname === "/UserSign";
   const AdminUser = location.pathname === "/AdminSign";
   const SignUp = location.pathname === "/SignUp";
@@ -40,6 +45,40 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
     setIsLoggedIn(false);
     navigate("/UserSign");
   };
+  useEffect(() => {
+    const fetchUserImage = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/person/${UserId}/image/`
+        );
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setImageSrcUser(imageUrl);
+      } catch (error) {
+        console.error("Error fetching user image:", error);
+      }
+    };
+
+    const fetchAdminImage = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/admin-image/${AdminId}/`
+        );
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setImageSrcAdmin(imageUrl);
+      } catch (error) {
+        console.error("Error fetching admin image:", error);
+      }
+    };
+
+    if (userType === "user") {
+      fetchUserImage();
+    } else if (userType === "admin") {
+      fetchAdminImage();
+    }
+  }, [userType, UserId, AdminId]);
+
   const navListAdmin = (
     <ul className="mt-2 mb-4 flex flex-col items-center gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ">
       <Typography
@@ -228,38 +267,66 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
                 ? navListAdmin
                 : null}
             </div>
-            <div className="flex justify-end gap-x-1">
-              <Button
-                variant="text"
-                size="sm"
-                className="hidden lg:inline-block"
-              >
-                <div className="profile">
+            <div className="flex justify-end gap-x-4 items-center ">
+              {userType === "user" && imageSrcUser ? (
+                <Link
+                  className="hidden lg:inline-block pDetails"
+                  to={`ProfileDetails/${UserId}`}
+                >
+                  <img
+                    src={imageSrcUser}
+                    alt="User"
+                    className="w-12 h-12 rounded-full cursor-pointer"
+                  />
+                </Link>
+              ) : userType === "admin" && imageSrcAdmin ? (
+                <Link
+                  className="hidden lg:inline-block pDetails"
+                  to={`ProfileDetails/${AdminId}`}
+                >
+                  <img
+                    src={imageSrcAdmin}
+                    alt="Admin"
+                    className="w-12 h-12 rounded-full cursor-pointer"
+                  />
+                </Link>
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer">
                   <svg
-                    width="18"
-                    height="21"
-                    viewBox="0 0 18 21"
-                    fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="w-6 h-6 text-gray-400"
                   >
                     <path
-                      d="M8.75 0.5C7.42392 0.5 6.15215 1.02678 5.21447 1.96447C4.27678 2.90215 3.75 4.17392 3.75 5.5C3.75 6.82608 4.27678 8.09785 5.21447 9.03553C6.15215 9.97322 7.42392 10.5 8.75 10.5C10.0761 10.5 11.3479 9.97322 12.2855 9.03553C13.2232 8.09785 13.75 6.82608 13.75 5.5C13.75 4.17392 13.2232 2.90215 12.2855 1.96447C11.3479 1.02678 10.0761 0.5 8.75 0.5ZM5 5.5C5 4.50544 5.39509 3.55161 6.09835 2.84835C6.80161 2.14509 7.75544 1.75 8.75 1.75C9.74456 1.75 10.6984 2.14509 11.4017 2.84835C12.1049 3.55161 12.5 4.50544 12.5 5.5C12.5 6.49456 12.1049 7.44839 11.4017 8.15165C10.6984 8.85491 9.74456 9.25 8.75 9.25C7.75544 9.25 6.80161 8.85491 6.09835 8.15165C5.39509 7.44839 5 6.49456 5 5.5ZM2.51125 11.75C2.18205 11.7487 1.85582 11.8124 1.55128 11.9374C1.24674 12.0624 0.96988 12.2464 0.736574 12.4786C0.503268 12.7109 0.318106 12.9869 0.191708 13.2909C0.0653099 13.5949 0.00016189 13.9208 0 14.25C0 16.3638 1.04125 17.9575 2.66875 18.9963C4.27125 20.0175 6.43125 20.5 8.75 20.5C11.0688 20.5 13.2288 20.0175 14.8312 18.9963C16.4587 17.9588 17.5 16.3625 17.5 14.25C17.5 13.587 17.2366 12.9511 16.7678 12.4822C16.2989 12.0134 15.663 11.75 15 11.75H2.51125ZM1.25 14.25C1.25 13.5588 1.81 13 2.51125 13H15C15.3315 13 15.6495 13.1317 15.8839 13.3661C16.1183 13.6005 16.25 13.9185 16.25 14.25C16.25 15.8862 15.4725 17.105 14.1587 17.9412C12.8212 18.795 10.9187 19.25 8.75 19.25C6.58125 19.25 4.67875 18.795 3.34125 17.9412C2.02875 17.1038 1.25 15.8875 1.25 14.25Z"
-                      fill="#EE5C24"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 14l9-5-9-5-9 5 9 5z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 14l9-5-9-5-9 5 9 5z"
                     />
                   </svg>
                 </div>
-              </Button>
-              <Button
+              )}
+
+              <div
                 variant="text"
                 size="sm"
-                className="hidden lg:inline-block"
+                className="hidden lg:inline-block pLogout"
                 onClick={handleLogout}
               >
-                <div className="profile">
-                  <button>
+                <div
+                  className="profile"
+                  style={{ width: "48px", height: "48px" }} // Explicitly set width and height
+                >
+                  <button className="">
                     <svg
-                      className="w-5 h-5"
-                      viewBox="0 0 25 26"
+                      className="w-6 h-6"
+                      viewBox="0 0 26 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
@@ -272,7 +339,7 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
                     </svg>
                   </button>
                 </div>
-              </Button>
+              </div>
             </div>
             <IconButton
               variant="text"
@@ -321,20 +388,45 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
                 : null}
               <div className=" ">
                 <Button fullWidth variant="text" size="sm" className="">
-                  <div className="profile">
-                    <svg
-                      width="18"
-                      height="21"
-                      viewBox="0 0 18 21"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                  {userType === "user" && imageSrcUser ? (
+                    <img
+                      src={imageSrcUser}
+                      alt="User"
+                      className="w-12 h-12 rounded-full cursor-pointer"
+                    />
+                  ) : userType === "admin" && imageSrcAdmin ? (
+                    <Link
+                      className="hidden lg:inline-block pDetails"
+                      to={`ProfileDetails/${AdminId}`}
                     >
-                      <path
-                        d="M8.75 0.5C7.42392 0.5 6.15215 1.02678 5.21447 1.96447C4.27678 2.90215 3.75 4.17392 3.75 5.5C3.75 6.82608 4.27678 8.09785 5.21447 9.03553C6.15215 9.97322 7.42392 10.5 8.75 10.5C10.0761 10.5 11.3479 9.97322 12.2855 9.03553C13.2232 8.09785 13.75 6.82608 13.75 5.5C13.75 4.17392 13.2232 2.90215 12.2855 1.96447C11.3479 1.02678 10.0761 0.5 8.75 0.5ZM5 5.5C5 4.50544 5.39509 3.55161 6.09835 2.84835C6.80161 2.14509 7.75544 1.75 8.75 1.75C9.74456 1.75 10.6984 2.14509 11.4017 2.84835C12.1049 3.55161 12.5 4.50544 12.5 5.5C12.5 6.49456 12.1049 7.44839 11.4017 8.15165C10.6984 8.85491 9.74456 9.25 8.75 9.25C7.75544 9.25 6.80161 8.85491 6.09835 8.15165C5.39509 7.44839 5 6.49456 5 5.5ZM2.51125 11.75C2.18205 11.7487 1.85582 11.8124 1.55128 11.9374C1.24674 12.0624 0.96988 12.2464 0.736574 12.4786C0.503268 12.7109 0.318106 12.9869 0.191708 13.2909C0.0653099 13.5949 0.00016189 13.9208 0 14.25C0 16.3638 1.04125 17.9575 2.66875 18.9963C4.27125 20.0175 6.43125 20.5 8.75 20.5C11.0688 20.5 13.2288 20.0175 14.8312 18.9963C16.4587 17.9588 17.5 16.3625 17.5 14.25C17.5 13.587 17.2366 12.9511 16.7678 12.4822C16.2989 12.0134 15.663 11.75 15 11.75H2.51125ZM1.25 14.25C1.25 13.5588 1.81 13 2.51125 13H15C15.3315 13 15.6495 13.1317 15.8839 13.3661C16.1183 13.6005 16.25 13.9185 16.25 14.25C16.25 15.8862 15.4725 17.105 14.1587 17.9412C12.8212 18.795 10.9187 19.25 8.75 19.25C6.58125 19.25 4.67875 18.795 3.34125 17.9412C2.02875 17.1038 1.25 15.8875 1.25 14.25Z"
-                        fill="#EE5C24"
+                      <img
+                        src={imageSrcAdmin}
+                        alt="Admin"
+                        className="w-12 h-12 rounded-full cursor-pointer"
                       />
-                    </svg>
-                  </div>
+                    </Link>
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-6 h-6 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 14l9-5-9-5-9 5 9 5z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 14l9-5-9-5-9 5 9 5z"
+                        />
+                      </svg>
+                    </div>
+                  )}
                 </Button>
                 <Button
                   fullWidth
@@ -343,20 +435,25 @@ export function NavbarDefault({ isAdmin, isSignedUp, onlogout }) {
                   className=""
                   onClick={handleLogout}
                 >
-                  <div className="profile">
-                    <svg
-                      className="w-5 h-5"
-                      viewBox="0 0 25 26"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M17.2188 6.39062V8.82812L18.7813 7.28125V4.40625L18 3.625H3.9375L3.15625 4.40625V5.16563L3.125 5.1875V21.2656L3.6875 21.9844L11.5 24.6719L12.5 23.9375V22.375H18L18.7813 21.5938V18.7656L17.2188 17.2031V20.8125H12.5V7.85938L11.9844 7.14062L6.30625 5.1875H17.2188V6.39062ZM10.9375 22.8125L4.6875 20.7188V6.3125L10.9375 8.40625V22.8125ZM21.125 13.75H13.3594V12.1875H21.0625L18.5625 9.6875L19.6719 8.59375L23.5312 12.4375V13.5469L19.6406 17.4219L18.5469 16.3281L21.125 13.75Z"
-                        fill="#EE5C24"
-                      />
-                    </svg>
+                  <div
+                    className="profile"
+                    style={{ width: "48px", height: "48px" }} // Explicitly set width and height
+                  >
+                    <button className="">
+                      <svg
+                        className="w-6 h-6"
+                        viewBox="0 0 26 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M17.2188 6.39062V8.82812L18.7813 7.28125V4.40625L18 3.625H3.9375L3.15625 4.40625V5.16563L3.125 5.1875V21.2656L3.6875 21.9844L11.5 24.6719L12.5 23.9375V22.375H18L18.7813 21.5938V18.7656L17.2188 17.2031V20.8125H12.5V7.85938L11.9844 7.14062L6.30625 5.1875H17.2188V6.39062ZM10.9375 22.8125L4.6875 20.7188V6.3125L10.9375 8.40625V22.8125ZM21.125 13.75H13.3594V12.1875H21.0625L18.5625 9.6875L19.6719 8.59375L23.5312 12.4375V13.5469L19.6406 17.4219L18.5469 16.3281L21.125 13.75Z"
+                          fill="#EE5C24"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 </Button>
               </div>
