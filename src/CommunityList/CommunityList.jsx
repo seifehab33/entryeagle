@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 function CommunityList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -12,6 +13,7 @@ function CommunityList() {
   const handleShowRelatives = (id) => {
     navigate(`/Relatives/${id}`);
   };
+
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   useEffect(() => {
@@ -30,6 +32,19 @@ function CommunityList() {
 
     fetchCommunities();
   }, []);
+  const handleDelete = async (communityId) => {
+    try {
+      await axios.delete(`http://localhost:8000/delete-community/`, {
+        data: { community_id: communityId },
+      });
+      const updatedCommunities = communities.filter(
+        (community) => community.Community_ID !== communityId
+      );
+      setCommunities(updatedCommunities);
+    } catch (error) {
+      console.error("Error deleting community:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-7 mt-5 px-8 mb-5">
@@ -90,7 +105,10 @@ function CommunityList() {
                     Relatives
                   </button>
                 </td>
-                <td className="px-4 py-2 text-center flex justify-center items-center">
+                <td
+                  className="px-4 py-2 text-center flex justify-center items-center cursor-pointer"
+                  onClick={() => handleDelete(community.Community_ID)}
+                >
                   {/* SVG icon for remove */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

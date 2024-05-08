@@ -7,7 +7,7 @@ import UserContext from "../UserContext";
 function AdminSign({ onSignIn }) {
   const navigate = useNavigate();
   const [animateLogo, setAnimateLogo] = useState(false);
-  const [email, setEmail] = useState("");
+  const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { setUserType, setIsLoggedIn, login } = useContext(UserContext);
@@ -20,7 +20,7 @@ function AdminSign({ onSignIn }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: email,
+          username: username,
           password: password,
         }),
       });
@@ -79,9 +79,9 @@ function AdminSign({ onSignIn }) {
           <input
             type="email"
             className="p-2 placeholder-[#EE5C24] rounded-lg"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="UserName"
+            value={username}
+            onChange={(e) => setusername(e.target.value)}
             onKeyDown={handleKeyDown}
           />
           <input

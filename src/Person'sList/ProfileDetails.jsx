@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -10,11 +10,14 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import "./Person'sList.css";
+import UserContext from "../UserContext";
 
 function ProfileDetails() {
   const { ComId, id } = useParams();
   const [user, setUser] = useState([]);
   const [size, setSize] = useState(null);
+  const { userType } = useContext(UserContext);
+  const AdminId = localStorage.getItem("Admin_id");
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -24,6 +27,7 @@ function ProfileDetails() {
     Address: "",
     PhoneNumber: "",
     photo_url: "",
+    community_id: "",
   });
 
   const formattedName = `${user.first_name}_${user.last_name}`;
@@ -31,7 +35,15 @@ function ProfileDetails() {
   const navigate = useNavigate();
 
   const handleOpen = (value) => setSize(value);
-
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:8000/person/${id}/`);
+      navigate("/Person'sList");
+      // setDeleted(true);
+    } catch (error) {
+      console.error("Error deleting person:", error);
+    }
+  };
   const handleViewHistory = () => {
     navigate(`/ProfileDetails/${user.id}/History`);
   };
@@ -50,6 +62,7 @@ function ProfileDetails() {
           BirthDate: response.data.birth_date,
           Email: response.data.email,
           photo_url: response.data.photo_url,
+          community_id: response.data.Community_ID,
         });
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -149,17 +162,18 @@ function ProfileDetails() {
           </p>
         </div>
         <div className="flex flex-col gap-2">
-          {/* <p>
-            <span>Phone No:</span> {user.phoneNumber}
-          </p>
-          <p>
-            <span>Address:</span> {user.Address}
-          </p> */}
           <p>
             <span>Email:</span> {formData.Email}
           </p>
           <p>
-            <span>CommunityId:</span> 12345
+            {formData.community_id ? (
+              <span>
+                Community_Id:{" "}
+                <span className="text-black font-light">
+                  {formData.community_id}
+                </span>
+              </span>
+            ) : null}
           </p>
           <p>
             <span>BirthDate:</span> {formData.BirthDate}
@@ -167,12 +181,23 @@ function ProfileDetails() {
         </div>
       </div>
       <div className="op-buttons flex justify-end gap-2">
-        <button
-          onClick={removeUserFromCommunity}
-          className="relative flex h-[50px] w-40 items-center justify-center overflow-hidden bg-white text-[#EE5C24] shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:text-white hover:before:h-56 hover:before:w-56"
-        >
-          <span className="relative z-10">Remove</span>
-        </button>
+        {ComId && (
+          <button
+            onClick={removeUserFromCommunity}
+            className="relative flex h-[50px] w-40 items-center justify-center overflow-hidden bg-white text-[#EE5C24] shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:text-white hover:before:h-56 hover:before:w-56"
+          >
+            <span className="relative z-10 text-sm">Remove from Community</span>
+          </button>
+        )}
+        {userType === "admin" && AdminId !== id && (
+          <button
+            onClick={handleDelete}
+            className="relative flex h-[50px] w-40 items-center justify-center overflow-hidden bg-white text-[#EE5C24] shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:text-white hover:before:h-56 hover:before:w-56"
+          >
+            <span className="relative z-10">Delete</span>
+          </button>
+        )}
+
         <button
           className="relative flex h-[50px] w-40 items-center justify-center overflow-hidden bg-white text-[#EE5C24] shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:text-white hover:before:h-56 hover:before:w-56"
           onClick={() => handleOpen("xs")}

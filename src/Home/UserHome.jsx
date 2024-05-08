@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function UserHome() {
   const [showFirstTwoStats, setShowFirstTwoStats] = useState(true);
-  const [relativesCount, setRelativesCount] = useState(0);
   const [error, setError] = useState("");
   const [communityId, setCommunityId] = useState("");
   const [userName, setUserName] = useState("");
+  const [relativesCount, setRelativesCount] = useState(0);
 
   const navigate = useNavigate();
-  const handlenavigate = () => {
-    navigate("/Relatives'List");
-  };
-
+  const UserId = localStorage.getItem("User_Id");
+  const communityIdLocal = localStorage.getItem("CommunityId");
   useEffect(() => {
     // Retrieve name from localStorage when component mounts
     const name = localStorage.getItem("firstname");
@@ -21,7 +19,22 @@ function UserHome() {
       setUserName(name);
     }
   }, []);
+  useEffect(() => {
+    const fetchRelativesCount = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/users-in-community/${communityIdLocal}/`
+        );
+        if (response.data) {
+          setRelativesCount(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching relatives count:", error);
+      }
+    };
 
+    fetchRelativesCount();
+  }, [communityIdLocal]);
   const handleCreateCommunity = async () => {
     try {
       // Make sure to replace 'your-api-endpoint' with the actual endpoint
@@ -50,31 +63,32 @@ function UserHome() {
           community_id: communityId,
         }
       );
-      setShowFirstTwoStats(false);
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().split("T")[0];
+      const rep = await axios.post(
+        "http://127.0.0.1:8000/add-user-to-community/",
+        {
+          person_id: UserId,
+          community_id: communityId,
+          join_date: formattedDate,
+        }
+      );
       localStorage.setItem("CommunityId", communityId);
+      navigate("/Relatives'List");
     } catch (error) {
+      if (
+        error.response &&
+        error.response.data.error === "User already exists in the community"
+      ) {
+        navigate("/Relatives'List");
+        localStorage.setItem("CommunityId", communityId);
+      }
       console.error("There was a problem with the fetch operation:", error);
       setError("The community id doesn't exist");
     }
   };
-
-  useEffect(() => {
-    const fetchRelativesCount = async () => {
-      try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/users-in-community/${communityId}/`
-        );
-        if (response.data) {
-          setRelativesCount(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching relatives count:", error);
-      }
-    };
-
-    fetchRelativesCount();
-  }, [communityId]);
   const numberOfUsers = relativesCount.length;
+
   const handleInputChange = (event) => {
     setCommunityId(event.target.value);
     setError("");
@@ -85,7 +99,29 @@ function UserHome() {
         Good Morning, {userName || "Guest"} !
       </div>
       <div className="statics grid sm:grid-cols-1 md:grid-cols-2 gap-2 py-2 lg:grid-cols-2 gap-y-6">
-        {showFirstTwoStats ? (
+        {communityIdLocal ? (
+          <>
+            <div className="flex gap-2 ">
+              <div className="third-stat stat sm:w-full md:w-[300px] lg:w-[400px]  rounded-md">
+                <span>Relatives</span>
+                <div className="flex justify-between">
+                  <span>Number of Relatives : {numberOfUsers} </span>
+                </div>
+              </div>
+              <div className="fourth-stat stat sm:w-full md:w-[300px] lg:w-[400px]   rounded-md">
+                <span className="text-[10px]">Your Community Id</span>
+                <span className="flex justify-end">
+                  <div className="bg-white px-8 rounded-md text-[#F7982C] text-sm ">
+                    <div className="rounded-md">{communityIdLocal}</div>
+                  </div>
+                </span>
+              </div>
+            </div>
+            {error && (
+              <div className="text-red-900 text-sm capitalize ">{error}</div>
+            )}
+          </>
+        ) : (
           <>
             <div className="first-stat stat sm:w-full md:w-[300px] lg:w-[400px] rounded-md">
               <span className="lg:text-xl">Already have Community ID</span>
@@ -119,32 +155,6 @@ function UserHome() {
                 >
                   Generate
                 </button>
-              </span>
-            </div>
-            {error && (
-              <div className="text-red-900 text-sm capitalize ">{error}</div>
-            )}
-          </>
-        ) : (
-          <>
-            <div className="third-stat stat sm:w-full md:w-[300px] lg:w-[400px] rounded-md">
-              <span>Relatives</span>
-              <div className="flex justify-between">
-                <span>Number of Relatives : {numberOfUsers} </span>
-                <button
-                  className="bg-white px-8 rounded-md text-[#F7982C] text-sm "
-                  onClick={handlenavigate}
-                >
-                  Show
-                </button>
-              </div>
-            </div>
-            <div className="fourth-stat stat sm:w-full md:w-[300px] lg:w-[400px] rounded-md">
-              <span>Your Community Id</span>
-              <span className="flex justify-end">
-                <div className="bg-white px-8 rounded-md text-[#F7982C] text-sm ">
-                  <div className="rounded-md">{communityId}</div>
-                </div>
               </span>
             </div>
           </>

@@ -42,7 +42,36 @@ function Dashboard() {
     fetchCameraList();
     fetchData();
   }, []);
+  // useEffect(() => {
+  //   const cameraHistorySocket = new WebSocket(
+  //     "ws://localhost:8000/ws/camera-history/"
+  //   );
 
+  //   cameraHistorySocket.onopen = () => {
+  //     console.log("WebSocket connected");
+  //   };
+
+  //   cameraHistorySocket.onmessage = (event) => {
+  //     const data = JSON.parse(event.data);
+  //     setuserTable(data);
+  //   };
+
+  //   return () => {
+  //     cameraHistorySocket.close();
+  //   };
+  // }, []);
+  // useEffect(() => {
+  //   const fetchCameraList = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:5000/api/cameras");
+  //       setCameras(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching camera list:", error);
+  //     }
+  //   };
+
+  //   fetchCameraList();
+  // }, []);
   useEffect(() => {
     // Calculate average check-in duration whenever userTable changes
     if (userTable.length > 0) {
@@ -145,7 +174,6 @@ function Dashboard() {
               <option value={1}>2</option>
             </select>
             <p>{cameras}</p>
-            <p>{camera_index}</p>
           </div>
         </div>
         <div className="camera-view">
@@ -166,7 +194,7 @@ function Dashboard() {
 
         {spinnerVisible && (
           <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full border-t-4 border-gray-200 h-20 w-20"></div>
+            <div className="animate-spin rounded-full border-t-4 border-black h-20 w-20"></div>
           </div>
         )}
         <div className="">
@@ -264,7 +292,7 @@ function Dashboard() {
                 />
               </svg>
             </div>
-            <p className="text-sm text-white mt-2">Total Users</p>
+            <p className="text-sm text-white mt-2">Total Checked In Users</p>
             <p className="text-lg font-semibold">{calculateTotalUsers()}</p>
           </div>
           <div className=" bg-[#ee5c24] rounded-lg shadow-md flex flex-col p-2 ">
@@ -280,13 +308,16 @@ function Dashboard() {
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
                 />
               </svg>
             </div>
-            <p className="text-sm text-white mt-2">Average Check-In Duration</p>
+            <p className="text-sm text-white mt-2">Number of Cameras</p>
             <p className="text-lg font-semibold">
-              <p> {averageCheckInDuration} Hours</p>
+              <p>
+                {" "}
+                <p>{cameras.length}</p>
+              </p>
             </p>
           </div>
         </div>
