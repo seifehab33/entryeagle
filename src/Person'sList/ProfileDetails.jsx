@@ -94,7 +94,7 @@ function ProfileDetails() {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://127.0.0.1:8000/person/${id}/edit/`, {
+      await fetch(`http://127.0.0.1:8000/person/${id}/edit/`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

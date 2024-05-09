@@ -55,22 +55,16 @@ function UserHome() {
   const handleCheckCommunity = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
     try {
-      const response = await axios.post(
-        "	http://127.0.0.1:8000/communities/check/",
-        {
-          community_id: communityId,
-        }
-      );
+      await axios.post("	http://127.0.0.1:8000/communities/check/", {
+        community_id: communityId,
+      });
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString().split("T")[0];
-      const rep = await axios.post(
-        "http://127.0.0.1:8000/add-user-to-community/",
-        {
-          person_id: UserId,
-          community_id: communityId,
-          join_date: formattedDate,
-        }
-      );
+      await axios.post("http://127.0.0.1:8000/add-user-to-community/", {
+        person_id: UserId,
+        community_id: communityId,
+        join_date: formattedDate,
+      });
       localStorage.setItem("CommunityId", communityId);
       navigate("/Relatives'List");
     } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Button,
@@ -18,6 +18,7 @@ function AdminPorifleDetails() {
   const [size, setSize] = useState(null);
   const { userType } = useContext(UserContext);
   const AdminId = localStorage.getItem("Admin_id");
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -30,21 +31,21 @@ function AdminPorifleDetails() {
 
   const formattedName = `${user.first_name}_${user.last_name}`;
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleOpen = (value) => setSize(value);
-  const handleDelete = async () => {
-    try {
-      await axios.delete(`http://localhost:8000/person/${id}/`);
-      navigate("/Person'sList");
-      // setDeleted(true);
-    } catch (error) {
-      console.error("Error deleting person:", error);
-    }
-  };
-  const handleViewHistory = () => {
-    navigate(`/ProfileDetails/${user.id}/History`);
-  };
+  // const handleDelete = async () => {
+  //   try {
+  //     await axios.delete(`http://localhost:8000/person/${id}/`);
+  //     navigate("/Person'sList");
+  //     // setDeleted(true);
+  //   } catch (error) {
+  //     console.error("Error deleting person:", error);
+  //   }
+  // };
+  // const handleViewHistory = () => {
+  //   navigate(`/ProfileDetails/${user.id}/History`);
+  // };
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -68,37 +69,39 @@ function AdminPorifleDetails() {
     };
 
     fetchUser();
-  }, [id]);
+  }, [AdminId]);
 
-  const removeUserFromCommunity = async () => {
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/remove-user-from-community/",
-        {
-          person_id: user.id,
-          community_id: parseInt(ComId), // Assuming you have this property in your user object
-        }
-      );
-      console.log(response.data);
-      setUser(null);
-      navigate(`/Relatives/${ComId}`);
+  // const removeUserFromCommunity = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       "http://127.0.0.1:8000/remove-user-from-community/",
+  //       {
+  //         person_id: user.id,
+  //         community_id: parseInt(ComId), // Assuming you have this property in your user object
+  //       }
+  //     );
+  //     console.log(response.data);
+  //     setUser(null);
+  //     navigate(`/Relatives/${ComId}`);
 
-      // Handle success, maybe show a message or update the UI accordingly
-    } catch (error) {
-      console.error("Error removing user from community:", error);
-      // Handle error, maybe show an error message to the user
-    }
-  };
+  //     // Handle success, maybe show a message or update the UI accordingly
+  //   } catch (error) {
+  //     console.error("Error removing user from community:", error);
+  //     // Handle error, maybe show an error message to the user
+  //   }
+  // };
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://127.0.0.1:8000/person/${id}/edit/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      await axios.put(
+        `http://127.0.0.1:8000/admin-edit/${AdminId}/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       console.log("Form data submitted:", formData);
 
@@ -148,14 +151,14 @@ function AdminPorifleDetails() {
             <p>@{formattedName}</p>
           </div>
         </div>
-        <div>
+        {/* <div>
           <button
             className="relative flex h-[50px] w-40 items-center justify-center overflow-hidden bg-white text-[#EE5C24] shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:text-white hover:before:h-56 hover:before:w-56"
             onClick={handleViewHistory}
           >
             <span className="relative z-10">View History</span>
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="indetails grid grid-cols-2">
         <div className="flex flex-col gap-2">
@@ -188,7 +191,7 @@ function AdminPorifleDetails() {
       <div className="op-buttons flex justify-end gap-2">
         {ComId && (
           <button
-            onClick={removeUserFromCommunity}
+            // onClick={removeUserFromCommunity}
             className="relative flex h-[50px] w-40 items-center justify-center overflow-hidden bg-white text-[#EE5C24] shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:text-white hover:before:h-56 hover:before:w-56"
           >
             <span className="relative z-10 text-sm">Remove from Community</span>
@@ -196,7 +199,7 @@ function AdminPorifleDetails() {
         )}
         {userType === "admin" && AdminId !== id && (
           <button
-            onClick={handleDelete}
+            // onClick={handleDelete}
             className="relative flex h-[50px] w-40 items-center justify-center overflow-hidden bg-white text-[#EE5C24] shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:text-white hover:before:h-56 hover:before:w-56"
           >
             <span className="relative z-10">Delete</span>
