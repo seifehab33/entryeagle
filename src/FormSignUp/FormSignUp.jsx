@@ -1,16 +1,6 @@
-import React, { useRef } from "react";
+import React from "react";
 import "./FormSignUp.css";
 function FormSignUp() {
-  const fileInputRef = useRef(null);
-
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    // Do something with the selected file
-  };
   return (
     <div className="form-SignUp px-8 my-8 ">
       <div className="form flex flex-col bg-[#F5E1BC] rounded-lg p-4 gap-4 items-center">

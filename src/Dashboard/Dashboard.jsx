@@ -8,13 +8,11 @@ import { Link } from "react-router-dom";
 import { Typography, Button } from "@material-tailwind/react";
 
 function Dashboard() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [searchText, setSearchText] = useState("");
   const [userTable, setuserTable] = useState([]);
   const [cameras, setCameras] = useState([]);
   const [camera_index, setCameraIndex] = useState(0);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
-  const [averageCheckInDuration, setAverageCheckInDuration] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
@@ -33,7 +31,9 @@ function Dashboard() {
         const response = await axios.get(
           "http://127.0.0.1:8000/camera-history/"
         );
-        setuserTable(response.data);
+        // Reverse the response data array to display from last to first
+        const reversedData = response.data.reverse();
+        setuserTable(reversedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -42,49 +42,6 @@ function Dashboard() {
     fetchCameraList();
     fetchData();
   }, []);
-  // useEffect(() => {
-  //   const cameraHistorySocket = new WebSocket(
-  //     "ws://localhost:8000/ws/camera-history/"
-  //   );
-
-  //   cameraHistorySocket.onopen = () => {
-  //     console.log("WebSocket connected");
-  //   };
-
-  //   cameraHistorySocket.onmessage = (event) => {
-  //     const data = JSON.parse(event.data);
-  //     setuserTable(data);
-  //   };
-
-  //   return () => {
-  //     cameraHistorySocket.close();
-  //   };
-  // }, []);
-  // useEffect(() => {
-  //   const fetchCameraList = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:5000/api/cameras");
-  //       setCameras(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching camera list:", error);
-  //     }
-  //   };
-
-  //   fetchCameraList();
-  // }, []);
-  useEffect(() => {
-    // Calculate average check-in duration whenever userTable changes
-    if (userTable.length > 0) {
-      const totalDuration = userTable.reduce((acc, data) => {
-        const duration = calculateDuration(data.checkIn_time);
-        return acc + duration;
-      }, 0);
-      const average = totalDuration / userTable.length;
-      setAverageCheckInDuration((average / 60).toFixed(1)); // Round to 1 decimal place
-    } else {
-      setAverageCheckInDuration(0);
-    }
-  }, [userTable]);
 
   const filteredUserData = userTable.filter((user) =>
     user.person.toLowerCase().includes(searchText.toLowerCase())
@@ -113,23 +70,6 @@ function Dashboard() {
     };
     const date = new Date(dateString);
     return date.toLocaleString(undefined, options);
-  };
-
-  const calculateDuration = (dateTime) => {
-    const time = new Date(dateTime);
-
-    if (isNaN(time.getTime())) {
-      return 0; // If invalid time, return 0 minutes
-    }
-
-    // Extract hours and minutes
-    const hour = time.getHours();
-    const minute = time.getMinutes();
-
-    // Convert time to minutes
-    const totalMinutes = hour * 60 + minute;
-
-    return totalMinutes;
   };
 
   return (
@@ -201,6 +141,7 @@ function Dashboard() {
           <table className="border-none table-camera rounded-md w-full md:max-w-[920px] ">
             <thead>
               <tr>
+                <th>No</th>
                 <th>Users</th>
                 <th>Camera</th>
                 <th>Check-in Time</th>
@@ -213,6 +154,7 @@ function Dashboard() {
               {currentUsers.map((data, index) => (
                 <React.Fragment key={index}>
                   <tr className="row-with-padding">
+                    <td className="text-center">{index + 1}</td>
                     <td className="text-center capitalize">{data.person}</td>
                     <td className="text-center">{data.camera}</td>
                     <td className="text-center">
@@ -273,7 +215,7 @@ function Dashboard() {
         </div>
       </div>
       <div className="calendar flex justify-center lg:w-1/3 order-1  lg:flex-1 lg:block lg:order-2 lg:mt-[100px] ">
-        <Calendar value={selectedDate} />
+        <Calendar />
         <div className="stats-card flex gap-4 my-[30px]">
           <div className=" bg-[#e48d29] rounded-lg shadow-md flex flex-col p-2">
             <div className="text-white ">

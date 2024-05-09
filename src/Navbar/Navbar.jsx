@@ -6,6 +6,7 @@ import {
   Typography,
   Button,
   IconButton,
+  Collapse,
 } from "@material-tailwind/react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../images/Our logo-01.png";
@@ -118,7 +119,7 @@ export function NavbarDefault() {
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-5 h-5"
+          className="w-5 h-5"
         >
           <path
             strokeLinecap="round"
@@ -283,7 +284,7 @@ export function NavbarDefault() {
               ) : userType === "admin" && imageSrcAdmin ? (
                 <Link
                   className="hidden lg:inline-block pDetails"
-                  to={`ProfileDetails/${AdminId}`}
+                  to={`Admin-Details/${AdminId}`}
                 >
                   <img
                     src={imageSrcAdmin}
@@ -332,8 +333,8 @@ export function NavbarDefault() {
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M17.2188 6.39062V8.82812L18.7813 7.28125V4.40625L18 3.625H3.9375L3.15625 4.40625V5.16563L3.125 5.1875V21.2656L3.6875 21.9844L11.5 24.6719L12.5 23.9375V22.375H18L18.7813 21.5938V18.7656L17.2188 17.2031V20.8125H12.5V7.85938L11.9844 7.14062L6.30625 5.1875H17.2188V6.39062ZM10.9375 22.8125L4.6875 20.7188V6.3125L10.9375 8.40625V22.8125ZM21.125 13.75H13.3594V12.1875H21.0625L18.5625 9.6875L19.6719 8.59375L23.5312 12.4375V13.5469L19.6406 17.4219L18.5469 16.3281L21.125 13.75Z"
                         fill="#EE5C24"
                       />
@@ -380,7 +381,7 @@ export function NavbarDefault() {
               )}
             </IconButton>
           </div>
-          <MobileNav open={openNav}>
+          <Collapse open={openNav}>
             <div className="flex justify-center flex-col ">
               {userType === "user"
                 ? navListUser
@@ -398,7 +399,7 @@ export function NavbarDefault() {
                   ) : userType === "admin" && imageSrcAdmin ? (
                     <Link
                       className="hidden lg:inline-block pDetails"
-                      to={`ProfileDetails/${AdminId}`}
+                      to={`Admin-Details/${AdminId}`}
                     >
                       <img
                         src={imageSrcAdmin}
@@ -429,7 +430,7 @@ export function NavbarDefault() {
                     </div>
                   )}
                 </Button>
-                <Button
+                {/* <Button
                   fullWidth
                   variant="text"
                   size="sm"
@@ -448,18 +449,44 @@ export function NavbarDefault() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M17.2188 6.39062V8.82812L18.7813 7.28125V4.40625L18 3.625H3.9375L3.15625 4.40625V5.16563L3.125 5.1875V21.2656L3.6875 21.9844L11.5 24.6719L12.5 23.9375V22.375H18L18.7813 21.5938V18.7656L17.2188 17.2031V20.8125H12.5V7.85938L11.9844 7.14062L6.30625 5.1875H17.2188V6.39062ZM10.9375 22.8125L4.6875 20.7188V6.3125L10.9375 8.40625V22.8125ZM21.125 13.75H13.3594V12.1875H21.0625L18.5625 9.6875L19.6719 8.59375L23.5312 12.4375V13.5469L19.6406 17.4219L18.5469 16.3281L21.125 13.75Z"
                           fill="#EE5C24"
                         />
                       </svg>
                     </button>
                   </div>
+                </Button> */}
+                <Button
+                  fullWidth
+                  variant="text"
+                  size="sm"
+                  className=""
+                  onClick={handleLogout}
+                >
+                  <div
+                    className="profile"
+                    style={{ width: "48px", height: "48px" }}
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      viewBox="0 0 26 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M17.2188 6.39062V8.82812L18.7813 7.28125V4.40625L18 3.625H3.9375L3.15625 4.40625V5.16563L3.125 5.1875V21.2656L3.6875 21.9844L11.5 24.6719L12.5 23.9375V22.375H18L18.7813 21.5938V18.7656L17.2188 17.2031V20.8125H12.5V7.85938L11.9844 7.14062L6.30625 5.1875H17.2188V6.39062ZM10.9375 22.8125L4.6875 20.7188V6.3125L10.9375 8.40625V22.8125ZM21.125 13.75H13.3594V12.1875H21.0625L18.5625 9.6875L19.6719 8.59375L23.5312 12.4375V13.5469L19.6406 17.4219L18.5469 16.3281L21.125 13.75Z"
+                        fill="#EE5C24"
+                      />
+                    </svg>
+                  </div>
                 </Button>
               </div>
             </div>
-          </MobileNav>
+          </Collapse>
         </Navbar>
       )}
     </>

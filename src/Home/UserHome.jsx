@@ -3,12 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function UserHome() {
-  const [showFirstTwoStats, setShowFirstTwoStats] = useState(true);
   const [error, setError] = useState("");
   const [communityId, setCommunityId] = useState("");
   const [userName, setUserName] = useState("");
   const [relativesCount, setRelativesCount] = useState(0);
-
+  const [communities, setCommunities] = useState([]);
   const navigate = useNavigate();
   const UserId = localStorage.getItem("User_Id");
   const communityIdLocal = localStorage.getItem("CommunityId");
@@ -47,7 +46,6 @@ function UserHome() {
       // Optionally, you can handle the response data or show a success message to the user
       setCommunityId("");
       setCommunityId(response.data.Community_ID);
-      setShowFirstTwoStats(false);
       localStorage.setItem("CommunityId", communityId);
     } catch (error) {
       console.error("Error creating community:", error);
@@ -87,6 +85,20 @@ function UserHome() {
       setError("The community id doesn't exist");
     }
   };
+  useEffect(() => {
+    const fetchUserCommunities = async () => {
+      try {
+        const response = await axios.get(
+          `	http://127.0.0.1:8000/user/${UserId}/communities/`
+        );
+        setCommunities(response.data);
+      } catch (error) {
+        console.error("Error fetching user communities:", error);
+      }
+    };
+
+    fetchUserCommunities();
+  }, [UserId]);
   const numberOfUsers = relativesCount.length;
 
   const handleInputChange = (event) => {
@@ -155,6 +167,26 @@ function UserHome() {
                 >
                   Generate
                 </button>
+              </span>
+            </div>
+            <div className="second-stat stat sm:w-full md:w-[300px] lg:w-[400px] rounded-md">
+              <span>List of Communities</span>
+              <span className="flex justify-between">
+                {communities.length === 0 ? (
+                  <p>No communities found for this user.</p>
+                ) : (
+                  <div>
+                    <ul>
+                      {communities.map((community, index) => (
+                        <li key={index}>
+                          <strong>Community ID:</strong>{" "}
+                          {community.Community_ID}, <strong>Join Date:</strong>{" "}
+                          {community.Join_Date}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </span>
             </div>
           </>

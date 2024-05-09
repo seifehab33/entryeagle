@@ -50,10 +50,7 @@ function Footer() {
             Contact Us
           </Link>
         </nav>
-        <Typography
-          variant="caption"
-          className="text-white text-sm mt-6 md:mt-0"
-        >
+        <Typography variant="h1" className="text-white text-sm mt-6 md:mt-0">
           &copy; 2024 Entry Eagle
         </Typography>
       </footer>

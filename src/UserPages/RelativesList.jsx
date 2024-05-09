@@ -6,7 +6,6 @@ import axios from "axios";
 function RelativesList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [relativesList, setRelativesList] = useState([]);
-  const [relativesCount, setRelativesCount] = useState(0);
   const communityId = localStorage.getItem("CommunityId");
   const UserId = localStorage.getItem("User_Id");
 
@@ -59,7 +58,6 @@ function RelativesList() {
         console.error("Error removing user from community:", error);
       });
   };
-  const numberOfUsers = relativesCount.length;
 
   const filteredRelatives = relativesList.filter((relative) =>
     relative.user_first.toLowerCase().includes(searchQuery.toLowerCase())
@@ -102,26 +100,9 @@ function RelativesList() {
             </button>
           </div>
         </div>
-        {/* {communityId && (
-          <div className="flex gap-2 ">
-            <div className="third-stat stat  rounded-md">
-              <span>Relatives</span>
-              <div className="flex justify-between">
-                <span>Number of Relatives : {numberOfUsers} </span>
-              </div>
-            </div>
-            <div className="fourth-stat stat   rounded-md">
-              <span className="text-[10px]">Your Community Id</span>
-              <span className="flex justify-end">
-                <div className="bg-white px-8 rounded-md text-[#F7982C] text-sm ">
-                  <div className="rounded-md">{communityId}</div>
-                </div>
-              </span>
-            </div>
-          </div>
-        )} */}
-        <div className="heading-relatives">
-          <div className="search-relatives flex items-center mb-2 gap-2 justify-between ">
+
+        <div className="heading-relatives ">
+          <div className="search-relatives flex items-center  mb-2 gap-2 justify-between ">
             {communityId ? (
               <button
                 className="bg-white w-[300px] lg:w-[150px] text-[#EE5C24] flex items-center justify-center border border-solid border-[#EE5C24] py-2 px-4 rounded-xl h-[30px]"
@@ -139,7 +120,7 @@ function RelativesList() {
           </div>
         </div>
       </div>
-      <div className="list mb-2">
+      <div className="list mb-2 my-[10px]">
         {filteredRelatives.length === 0 ? (
           <p className="text-3xl font-bold capitalize tracking-wide text-center text-[#ee5c24]">
             No relatives yet

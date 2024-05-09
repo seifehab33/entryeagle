@@ -22,6 +22,7 @@ import PrivacyPolicy from './Home/PrivacyPolicy/PrivacyPolicy';
 import ContactUs from './Home/ContactUs/ContactUs';
 import RelativesListCommunity from './CommunityList/Relative\'sListCommunity';
 import { UserProvider, useUser } from './UserContext'; 
+import AdminPorifleDetails from './Admin/AdminPorifleDetails';
 
 const App = () => {
 
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="/Relatives'List/user/:id" element={<PrivateRoute component={UserDetails} />} />
             <Route path="/Person'sList" element={<PrivateRoute component={PersonList} />} />
             <Route path="/ProfileDetails/:ComId/:id" element={<PrivateRoute component={ProfileDetails} />} />
+            <Route path="/Admin-Details/:id" element={<PrivateRoute component={AdminPorifleDetails} />} />
             <Route path="/ProfileDetails/:id/History" element={<PrivateRoute component={HistoryPerson} />} />
             <Route path="/CommunityList" element={<PrivateRoute component={CommunityList} />} />
             <Route path='/PrivacyPolicy' element={<PrivateRoute component={PrivacyPolicy} />} />
