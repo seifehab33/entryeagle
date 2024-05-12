@@ -27,7 +27,7 @@ function PersonList() {
     };
 
     fetchData();
-  }, []);
+  }, [users]);
   return (
     <div className="relatives px-8 mt-[10px]">
       <div className="heading-relatives">
