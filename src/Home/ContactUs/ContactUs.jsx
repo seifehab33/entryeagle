@@ -1,35 +1,72 @@
 import React, { useEffect, useState } from "react";
 import "./Contactus.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
 function ContactUs() {
   const [fname, setFname] = useState("");
-  const [lname, setlname] = useState("");
+  const [lname, setLname] = useState("");
   const [phoneno, setPhone] = useState("");
-  const [email, setemail] = useState("");
-  const [message, setmessage] = useState("");
-  const [error, seterror] = useState("");
-
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const [selectedSubject, setSelectedSubject] = useState(null);
   useEffect(() => {
-    seterror("");
+    setError("");
   }, [selectedSubject]);
   const handleSubjectChange = (event) => {
     setSelectedSubject(event.target.value);
   };
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    // Retrieve first name from localStorage
+    const storedFirstName = localStorage.getItem("firstname");
+    if (storedFirstName) {
+      setFname(storedFirstName);
+    }
+  }, []);
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setFname("");
-    setPhone("");
-    setlname("");
-    setemail("");
-    setmessage("");
-    setSelectedSubject("");
+
+    // Validate the form
     if (!selectedSubject) {
-      seterror("Please select a subject.");
-    } else {
-      console.log("Selected subject:", selectedSubject);
+      setError("Please select a subject.");
+      return;
+    }
+    const parsedPhone = parseInt(phoneno);
+
+    // Prepare form data
+    const formData = {
+      fname,
+      lname,
+      phoneno: parsedPhone,
+      email,
+      message,
+      selectedSubject,
+    };
+
+    try {
+      // Send POST request to Django view using Axios
+      const response = await axios.post(
+        "http://127.0.0.1:8000/contact/",
+        formData
+      );
+
+      // Check if the request was successful
+      if (response.status === 200) {
+        console.log("Form submitted successfully");
+        // Optionally, you can reset the form fields here
+        setFname("");
+        setLname("");
+        setPhone("");
+        setEmail("");
+        setMessage("");
+        setSelectedSubject(null);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      // Optionally, you can handle errors here
     }
   };
+
   return (
     <>
       <div class="max-w-6xl mx-auto bg-white my-6 font-[sans-serif] text-[#ee5c24] shake slide-top">
@@ -161,6 +198,7 @@ function ContactUs() {
                     type="text"
                     placeholder="First Name"
                     value={fname}
+                    readOnly
                     onChange={(e) => {
                       setFname(e.target.value);
                     }}
@@ -191,7 +229,7 @@ function ContactUs() {
                     placeholder="Last Name"
                     value={lname}
                     onChange={(e) => {
-                      setlname(e.target.value);
+                      setLname(e.target.value);
                     }}
                     class="px-2 py-3 bg-white w-full text-black text-sm border-b-2 focus:border-[#011c2b] outline-none placeholder:text-[#ee5c24] placeholder:text-opacity-[50%]"
                   />
@@ -241,7 +279,7 @@ function ContactUs() {
                     placeholder="Email"
                     value={email}
                     onChange={(e) => {
-                      setemail(e.target.value);
+                      setEmail(e.target.value);
                     }}
                     class="px-2 py-3 bg-white text-black w-full placeholder:text-[#ee5c24] placeholder:text-opacity-[50%] text-sm border-b-2 focus:border-[#011c2b] outline-none"
                   />
@@ -283,7 +321,7 @@ function ContactUs() {
                     placeholder="Write Message"
                     value={message}
                     onChange={(e) => {
-                      setmessage(e.target.value);
+                      setMessage(e.target.value);
                     }}
                     class="px-2 pt-3 bg-white text-black w-full text-sm border-b-2 focus:border-[#011c2b] outline-none placeholder:text-[#ee5c24] placeholder:text-opacity-[50%]"
                   ></textarea>

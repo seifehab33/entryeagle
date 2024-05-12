@@ -62,7 +62,7 @@ function ProfileDetails() {
           BirthDate: response.data.birth_date,
           Email: response.data.email,
           photo_url: response.data.photo_url,
-          community_id: response.data.Community_ID,
+          community_id: response.data.Community_IDs,
         });
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -129,7 +129,7 @@ function ProfileDetails() {
           <img
             src={`http://127.0.0.1:8000/${formData.photo_url}`}
             alt="userimg"
-            className="h-[300px] w-[300px] rounded-full   transition duration-300 ease-in-out transform hover:scale-105 object-cover object-center"
+            className="h-[300px] w-[300px] rounded-full   transition duration-300 ease-in-out transform hover:scale-105 object-cover object-top"
           />
           <div className="">
             <p className="font-bold text-4xl capitalize">
@@ -170,7 +170,11 @@ function ProfileDetails() {
               <span>
                 Community_Id:{" "}
                 <span className="text-black font-light">
-                  {formData.community_id}
+                  {formData.community_id && (
+                    <span>
+                      <span>{formData.community_id.join(", ")}</span>
+                    </span>
+                  )}
                 </span>
               </span>
             ) : null}

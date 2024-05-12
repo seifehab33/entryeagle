@@ -100,7 +100,7 @@ function AdminSign({ onSignIn }) {
             Sign In
           </button>
         </div>
-        {error && <p>{error}</p>}
+        {error && <p className="text-red-900 text-sm">{error}</p>}
         <div className="dont-have flex flex-col gap-3 mt-6 justify-center items-center">
           <p className="text-[#494949] text-sm">
             Are you an User?{" "}

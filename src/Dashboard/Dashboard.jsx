@@ -15,6 +15,7 @@ function Dashboard() {
   const [spinnerVisible, setSpinnerVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [interval, setinterval] = useState(0);
 
   useEffect(() => {
     const fetchCameraList = async () => {
@@ -34,13 +35,25 @@ function Dashboard() {
         // Reverse the response data array to display from last to first
         const reversedData = response.data.reverse();
         setuserTable(reversedData);
+        console.log(reversedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchCameraList();
-    fetchData();
+    const fetchCameraListAndData = async () => {
+      await fetchCameraList();
+      await fetchData();
+    };
+
+    // Fetch data initially
+    fetchCameraListAndData();
+
+    // Set up polling mechanism
+    const intervalId = setInterval(fetchCameraListAndData, 30000); // Fetch every minute
+    setinterval(intervalId);
+    // Clean up interval when component unmounts
+    return () => clearInterval(intervalId);
   }, []);
 
   const filteredUserData = userTable.filter((user) =>
@@ -60,17 +73,19 @@ function Dashboard() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const calculateTotalUsers = () => filteredUserData.length;
 
-  const formatDate = (dateString) => {
+  function convertToCustomFormat(dateString) {
+    const date = new Date(dateString);
     const options = {
-      year: "numeric",
       month: "long",
       day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+      timeZone: "UTC", // Specify the timezone as UTC
     };
-    const date = new Date(dateString);
     return date.toLocaleString(undefined, options);
-  };
+  }
 
   return (
     <div className="flex flex-col py-3 px-8 gap-6 lg:flex-row ">
@@ -125,6 +140,7 @@ function Dashboard() {
             onError={(e) => {
               e.target.style.display = "none"; // Hide the image on error
               setSpinnerVisible(true); // Show the spinner on error
+              clearInterval(interval);
             }}
             onLoad={() => {
               setSpinnerVisible(false); // Hide the spinner when the image loads
@@ -158,10 +174,10 @@ function Dashboard() {
                     <td className="text-center capitalize">{data.person}</td>
                     <td className="text-center">{data.camera}</td>
                     <td className="text-center">
-                      {formatDate(data.checkIn_time)}
+                      {convertToCustomFormat(data.checkIn_time)}
                     </td>
                     <td className="text-center">
-                      {formatDate(data.checkOut_time)}
+                      {convertToCustomFormat(data.checkOut_time)}
                     </td>
                     <td className="flex items-center justify-center">
                       <Link
