@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Typography, Button } from "@material-tailwind/react";
+import unkown from '../images/person.jpg'
+
 
 function HistoryPerson() {
   const { id } = useParams();
@@ -13,17 +15,22 @@ function HistoryPerson() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5); // Change this value to adjust items per page
-
   useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:8000/persons/${id}/`)
-      .then((response) => {
+    // Define an async function inside the useEffect
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/persons/${id}/`);
         setUser(response.data); // Assuming the response data is the user object
-      })
-      .catch((error) => {
+      } catch (error) {
         setError("Failed to fetch user data");
-      });
+        console.error(error);
+      }
+    };
+
+    // Call the async function
+    fetchUser();
   }, [id]);
+  
   useEffect(() => {
     const fetchPersonData = async () => {
       setLoading(true);
@@ -52,12 +59,16 @@ function HistoryPerson() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!personData.length) return <div>No history found</div>;
+
   return (
+    
+      <>
+      {user ?(
     <div className="px-8 mt-[10px] flex flex-col gap-[2em]">
       <div className="p-4 flex bg-[#FAF0DD] items-center gap-[20px] rounded-xl">
         <div className="">
           <img
-            src={`http://127.0.0.1:8000/${user.photo_url}`}
+            src={user.photo_url ? `http://127.0.0.1:8000/${user.photo_url}` : unkown}
             alt=""
             className="h-[300px] w-[300px] rounded-full   transition duration-300 ease-in-out transform hover:scale-105 object-cover object-center"
           />
@@ -148,6 +159,14 @@ function HistoryPerson() {
         </div>
       </div>
     </div>
+    ):
+    (<div className="flex justify-center items-center h-full">
+            <div className="animate-spin rounded-full border-t-4 border-black h-20 w-20"></div>
+    </div>)
+    }
+    </>
+    
+  
   );
 }
 

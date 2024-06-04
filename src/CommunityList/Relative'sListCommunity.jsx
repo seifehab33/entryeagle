@@ -98,7 +98,7 @@ function RelativesListCommunity() {
     <div className="relatives px-8 mt-[10px]">
       <div className="heading-relatives">
         <div className="flex justify-between">
-          <p className="text-3xl font-bold">Relatives's List</p>
+          <p className="text-3xl font-bold">Relatives List</p>
           <button
             className="bg-white    text-[#EE5C24] flex items-center justify-center border border-solid border-[#EE5C24] py-2 px-4 rounded-xl h-[30px]"
             onClick={handleOpen}

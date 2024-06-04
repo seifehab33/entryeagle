@@ -50,7 +50,7 @@ function Dashboard() {
     fetchCameraListAndData();
 
     // Set up polling mechanism
-    const intervalId = setInterval(fetchCameraListAndData, 30000); // Fetch every minute
+    const intervalId = setInterval(fetchCameraListAndData, 1000); // Fetch every minute
     setinterval(intervalId);
     // Clean up interval when component unmounts
     return () => clearInterval(intervalId);
@@ -128,15 +128,15 @@ function Dashboard() {
               <option value={0}>1</option>
               <option value={1}>2</option>
             </select>
-            <p>{cameras}</p>
+            {/* <p>{cameras}</p> */}
           </div>
         </div>
         <div className="camera-view">
-          <h2>Camera {camera_index}</h2>
+        <h2>{camera_index === 0 ? "Room A301" : (camera_index === 1 ? "Room A302" : "Unknown room")}</h2>
           <img
             src={`http://localhost:5000/video_feed/${camera_index}`}
             // alt={`Camera Feed ${cameraId}`}
-            style={{ width: "40%" }}
+            style={{ width: "70%" }}
             onError={(e) => {
               e.target.style.display = "none"; // Hide the image on error
               setSpinnerVisible(true); // Show the spinner on error
@@ -159,7 +159,7 @@ function Dashboard() {
               <tr>
                 <th>No</th>
                 <th>Users</th>
-                <th>Camera</th>
+                <th>Location</th>
                 <th>Check-in Time</th>
                 <th>Checkout Time</th>
                 <th className="text-center">Details</th>

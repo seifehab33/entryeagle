@@ -20,14 +20,13 @@ function PersonList() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/persons/");
         setUsers(response.data);
-        console.log(users);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [users]);
+  }, []);
   return (
     <div className="relatives px-8 mt-[10px]">
       <div className="heading-relatives">
