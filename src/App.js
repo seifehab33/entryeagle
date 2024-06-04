@@ -23,6 +23,7 @@ import ContactUs from './Home/ContactUs/ContactUs';
 import RelativesListCommunity from './CommunityList/Relative\'sListCommunity';
 import { UserProvider, useUser } from './UserContext'; 
 import AdminPorifleDetails from './Admin/AdminPorifleDetails';
+import Main from './Main/Main';
 
 const App = () => {
 
@@ -35,6 +36,7 @@ const App = () => {
         <main className='flex-grow '>
           <Routes>
             <Route path="/" element={<Welcome />} />
+            <Route path="/HomePage" element={<Main />} />
             <Route path="/AdminPage" element={<PrivateRoute component={Home} />} />
             <Route path="/AboutUs" element={<PrivateRoute component={AboutUs} />} />
             <Route path="/UserPage" element={<PrivateRoute component={UserHome} />} />

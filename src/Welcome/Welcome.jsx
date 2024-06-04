@@ -12,7 +12,7 @@ function Welcome() {
       setFadeIn(true);
     }, 700);
     const timer = setTimeout(() => {
-      navigate("/UserSign");
+      navigate("/Homepage");
     }, 2200);
 
     return () => clearTimeout(timer);

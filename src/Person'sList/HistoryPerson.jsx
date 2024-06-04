@@ -31,7 +31,9 @@ function HistoryPerson() {
         const response = await axios.get(
           `	http://127.0.0.1:8000/camera-history/${id}/`
         );
-        setPersonData(response.data);
+        const reversedData = response.data.reverse(); // Reverse the data array
+
+        setPersonData(reversedData);
 
         setLoading(false);
       } catch (err) {
@@ -47,7 +49,36 @@ function HistoryPerson() {
   const currentItems = personData.slice(indexOfFirstItem, indexOfLastItem);
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString(); // Adjust formatting as needed
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+      timeZone: "UTC",
+    };
+    return date.toLocaleString(undefined, options); // Adjust formatting as needed
+  };
+  const formatFULLDATE = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour12: true,
+      timeZone: "UTC",
+    };
+    return date.toLocaleString(undefined, options); // Adjust formatting as needed
+  };
+  const formatDateOnly = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "UTC",
+    };
+    return date.toLocaleString(undefined, options); // Adjust formatting as needed
   };
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -81,7 +112,7 @@ function HistoryPerson() {
           </p>
           <p className="text-[15px] font-semibold text-gray-700 mb-3">
             <span className="text-[#EE5C24]">Created at:</span>{" "}
-            {formatDate(user.created_at)}
+            {formatFULLDATE(user.created_at)}
           </p>
         </div>
       </div>
@@ -104,13 +135,13 @@ function HistoryPerson() {
               <tr key={index}>
                 <td className="text-center">{index}</td>
                 <td className="text-center">
-                  {new Date(entry.checkIn_time).toLocaleTimeString()}
+                  {formatDate(entry.checkIn_time)}
                 </td>
                 <td className="text-center">
-                  {new Date(entry.checkOut_time).toLocaleTimeString()}
+                  {formatDate(entry.checkOut_time)}
                 </td>
                 <td className="text-center">
-                  {new Date(entry.checkIn_time).toLocaleDateString()}
+                  {formatDateOnly(entry.checkIn_time)}
                 </td>
                 <td className="text-center">{entry.camera}</td>
               </tr>

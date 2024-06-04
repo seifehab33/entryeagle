@@ -10,7 +10,8 @@ function Footer() {
     location.pathname === "/UserSign" ||
     location.pathname === "/AdminSign" ||
     location.pathname === "/SignUp" ||
-    location.pathname === "/";
+    location.pathname === "/" ||
+    location.pathname === "/Homepage";
 
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
