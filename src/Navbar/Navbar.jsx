@@ -10,6 +10,7 @@ import {
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../images/Our logo-01.png";
 import UserContext from "../UserContext";
+import svg from "../assets/img/team-svgrepo-com.svg";
 export function NavbarDefault() {
   const [openNav, setOpenNav] = React.useState(false);
   const [imageSrcAdmin, setImageSrcAdmin] = useState("");
@@ -23,7 +24,7 @@ export function NavbarDefault() {
   const SignUp = location.pathname === "/SignUp";
   const Welcome = location.pathname === "/";
 
-  const { userType, setUserType, setIsLoggedIn, logout } =
+  const { userType, setUserType, setIsLoggedIn, logout, isLoggedIn } =
     useContext(UserContext);
   const navigate = useNavigate();
   const imageRef = useRef(null);
@@ -43,6 +44,9 @@ export function NavbarDefault() {
     // Clear userType and isLoggedIn states
     setUserType(null);
     setIsLoggedIn(false);
+    navigate("/UserSign");
+  };
+  const HandleLogin = () => {
     navigate("/UserSign");
   };
   useEffect(() => {
@@ -78,7 +82,14 @@ export function NavbarDefault() {
       fetchAdminImage();
     }
   }, [userType, UserId, AdminId]);
-
+  const handleClickSmoothly = (event) => {
+    event.preventDefault();
+    const targetId = event.target.hash.substring(1); // Get the target ID without the '#'
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
   const navListAdmin = (
     <ul className="mt-2 mb-4 flex flex-col items-center gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ">
       <Typography
@@ -253,9 +264,82 @@ export function NavbarDefault() {
       </Typography>
     </ul>
   );
+  const navListNormal = (
+    <ul className="mt-2 mb-4 flex flex-col items-center gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ">
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="flex items-center justify-between gap-x-2 p-1 font-medium"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          x="0px"
+          y="0px"
+          className="size-6"
+          viewBox="0 0 50 50"
+        >
+          <path d="M 25 1 C 11.222656 1 0 10.878906 0 23.1875 C 0 29.234375 2.773438 34.664063 7.21875 38.6875 C 6.546875 40.761719 5.046875 42.398438 3.53125 43.65625 C 2.714844 44.332031 1.933594 44.910156 1.3125 45.46875 C 1.003906 45.746094 0.722656 46.027344 0.5 46.375 C 0.277344 46.722656 0.078125 47.21875 0.21875 47.75 L 0.34375 48.15625 L 0.6875 48.375 C 1.976563 49.117188 3.582031 49.246094 5.3125 49.125 C 7.042969 49.003906 8.929688 48.605469 10.78125 48.09375 C 14.375 47.101563 17.75 45.6875 19.53125 44.90625 C 21.289063 45.273438 23.054688 45.5 24.90625 45.5 C 38.683594 45.5 49.90625 35.621094 49.90625 23.3125 C 49.90625 11.007813 38.78125 1 25 1 Z M 25 3 C 37.820313 3 47.90625 12.214844 47.90625 23.3125 C 47.90625 34.402344 37.730469 43.5 24.90625 43.5 C 23.078125 43.5 21.355469 43.320313 19.625 42.9375 L 19.28125 42.84375 L 19 43 C 17.328125 43.738281 13.792969 45.179688 10.25 46.15625 C 8.476563 46.644531 6.710938 47.019531 5.1875 47.125 C 4.167969 47.195313 3.539063 46.953125 2.84375 46.78125 C 3.339844 46.355469 4.019531 45.847656 4.8125 45.1875 C 6.554688 43.742188 8.644531 41.730469 9.375 38.75 L 9.53125 38.125 L 9.03125 37.75 C 4.625 34.015625 2 28.875 2 23.1875 C 2 12.097656 12.175781 3 25 3 Z M 23.8125 12.8125 C 23.511719 12.8125 23.40625 12.988281 23.40625 13.1875 L 23.40625 15.8125 C 23.40625 16.113281 23.613281 16.1875 23.8125 16.1875 L 26.1875 16.1875 C 26.488281 16.1875 26.59375 16.011719 26.59375 15.8125 L 26.59375 13.1875 C 26.59375 12.886719 26.386719 12.8125 26.1875 12.8125 Z M 23.90625 20.09375 C 23.605469 20.09375 23.5 20.300781 23.5 20.5 L 23.5 33.90625 C 23.5 34.207031 23.707031 34.3125 23.90625 34.3125 L 23.90625 34.40625 L 26.1875 34.40625 C 26.488281 34.40625 26.59375 34.199219 26.59375 34 L 26.59375 20.5 C 26.59375 20.199219 26.386719 20.09375 26.1875 20.09375 Z"></path>
+        </svg>
+
+        <a
+          href="#about"
+          className="flex items-center"
+          onClick={handleClickSmoothly}
+        >
+          About Us
+        </a>
+      </Typography>
+
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="flex items-center justify-between gap-x-2 p-1 font-medium"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z"
+          />
+        </svg>
+
+        <a
+          href="#service"
+          className="flex items-center"
+          onClick={handleClickSmoothly}
+        >
+          Service
+        </a>
+      </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="flex items-center justify-between gap-x-2 p-1 font-medium"
+      >
+        <img src={svg} className="size-6" alt="" />
+        <a
+          href="#team"
+          className="flex items-center"
+          onClick={handleClickSmoothly}
+        >
+          The Team
+        </a>
+      </Typography>
+    </ul>
+  );
   return (
     <>
-      {!SignUser && !AdminUser && !Welcome && !SignUp && (
+      {!SignUser && !AdminUser && !SignUp && !Welcome && (
         <Navbar className="z-50 py-2 lg:px-8 lg:py-4 max-w-full">
           <div className="justify-between flex items-center  text-blue-gray-900 ">
             <Typography className="">
@@ -266,9 +350,9 @@ export function NavbarDefault() {
                 ? navListUser
                 : userType === "admin"
                 ? navListAdmin
-                : null}
+                : navListNormal}
             </div>
-            <div className="flex justify-end gap-x-4 items-center ">
+            {/* <div className="flex justify-end gap-x-4 items-center ">
               {userType === "user" && imageSrcUser ? (
                 <Link
                   className="hidden lg:inline-block pDetails"
@@ -341,7 +425,135 @@ export function NavbarDefault() {
                   </button>
                 </div>
               </div>
+            </div> */}
+            <div className="flex justify-end gap-x-4 items-center">
+              {isLoggedIn ? (
+                // Render user or admin profile image based on userType
+                userType === "user" && imageSrcUser ? (
+                  <Link
+                    className="hidden lg:inline-block pDetails"
+                    to={`ProfileDetails/${UserId}`}
+                  >
+                    <img
+                      src={imageSrcUser}
+                      alt="User"
+                      className="w-12 h-12 rounded-full cursor-pointer"
+                    />
+                  </Link>
+                ) : userType === "admin" && imageSrcAdmin ? (
+                  <Link
+                    className="hidden lg:inline-block pDetails"
+                    to={`Admin-Details/${AdminId}`}
+                  >
+                    <img
+                      src={imageSrcAdmin}
+                      alt="Admin"
+                      className="w-12 h-12 rounded-full cursor-pointer"
+                    />
+                  </Link>
+                ) : (
+                  // Render a default icon if userType is not provided or unrecognized
+                  <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-6 h-6 text-gray-400"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 14l9-5-9-5-9 5 9 5z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 14l9-5-9-5-9 5 9 5z"
+                      />
+                    </svg>
+                  </div>
+                )
+              ) : (
+                // Render login icon if user is not logged in
+                <div
+                  className="w-10 h-10 rounded-full bg-gray-200 hidden lg:flex  items-center justify-center cursor-pointer "
+                  onClick={HandleLogin}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    id="Login"
+                    className="w-6 h-6 flex justify-center items-center "
+                  >
+                    <path
+                      d="M14 10 8 5v3H1v4h7v3l6-5zm3 7H9v2h8c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2H9v2h8v14z"
+                      fill="#ee5c24"
+                      class="color000000 svgShape"
+                    ></path>
+                  </svg>
+                </div>
+              )}
+
+              {/* Render logout button */}
+              {/* <div
+                variant="text"
+                size="sm"
+                className="hidden lg:inline-block pLogout"
+                onClick={handleLogout}
+              >
+                <div
+                  className="profile"
+                  style={{ width: "48px", height: "48px" }}
+                >
+                  <button className="">
+                    <svg
+                      className="w-6 h-6"
+                      viewBox="0 0 26 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M17.2188 6.39062V8.82812L18.7813 7.28125V4.40625L18 3.625H3.9375L3.15625 4.40625V5.16563L3.125 5.1875V21.2656L3.6875 21.9844L11.5 24.6719L12.5 23.9375V22.375H18L18.7813 21.5938V18.7656L17.2188 17.2031V20.8125H12.5V7.85938L11.9844 7.14062L6.30625 5.1875H17.2188V6.39062ZM10.9375 22.8125L4.6875 20.7188V6.3125L10.9375 8.40625V22.8125ZM21.125 13.75H13.3594V12.1875H21.0625L18.5625 9.6875L19.6719 8.59375L23.5312 12.4375V13.5469L19.6406 17.4219L18.5469 16.3281L21.125 13.75Z"
+                        fill="#EE5C24"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div> */}
+              {isLoggedIn && (
+                <div
+                  variant="text"
+                  size="sm"
+                  className="hidden lg:inline-block pLogout"
+                  onClick={handleLogout}
+                >
+                  <div
+                    className="profile"
+                    style={{ width: "48px", height: "48px" }}
+                  >
+                    <button className="">
+                      <svg
+                        className="w-6 h-6"
+                        viewBox="0 0 26 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M17.2188 6.39062V8.82812L18.7813 7.28125V4.40625L18 3.625H3.9375L3.15625 4.40625V5.16563L3.125 5.1875V21.2656L3.6875 21.9844L11.5 24.6719L12.5 23.9375V22.375H18L18.7813 21.5938V18.7656L17.2188 17.2031V20.8125H12.5V7.85938L11.9844 7.14062L6.30625 5.1875H17.2188V6.39062ZM10.9375 22.8125L4.6875 20.7188V6.3125L10.9375 8.40625V22.8125ZM21.125 13.75H13.3594V12.1875H21.0625L18.5625 9.6875L19.6719 8.59375L23.5312 12.4375V13.5469L19.6406 17.4219L18.5469 16.3281L21.125 13.75Z"
+                          fill="#EE5C24"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
+
             <IconButton
               variant="text"
               className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -380,67 +592,93 @@ export function NavbarDefault() {
               )}
             </IconButton>
           </div>
+
           <Collapse open={openNav}>
-            <div className="flex justify-center flex-col ">
-              {userType === "user"
-                ? navListUser
-                : userType === "admin"
-                ? navListAdmin
-                : null}
-              <div className=" ">
-                <Button fullWidth variant="text" size="sm" className="">
-                  {userType === "user" && imageSrcUser ? (
-                    <img
-                      src={imageSrcUser}
-                      alt="User"
-                      className="w-12 h-12 rounded-full cursor-pointer"
-                    />
-                  ) : userType === "admin" && imageSrcAdmin ? (
-                    <Link
-                      className="hidden lg:inline-block pDetails"
-                      to={`Admin-Details/${AdminId}`}
-                    >
-                      <img
-                        src={imageSrcAdmin}
-                        alt="Admin"
-                        className="w-12 h-12 rounded-full cursor-pointer"
-                      />
-                    </Link>
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        className="w-6 h-6 text-gray-400"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 14l9-5-9-5-9 5 9 5z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 14l9-5-9-5-9 5 9 5z"
-                        />
-                      </svg>
-                    </div>
-                  )}
-                </Button>
-                {/* <Button
-                  fullWidth
-                  variant="text"
-                  size="sm"
-                  className=""
-                  onClick={handleLogout}
-                >
+            <div className="flex justify-center flex-col mt-10">
+              {!isLoggedIn || userType === null ? (
+                <>
+                  <div>{navListNormal}</div>
+
                   <div
-                    className="profile"
-                    style={{ width: "48px", height: "48px" }} // Explicitly set width and height
+                    className="w-10 h-10 rounded-full bg-gray-200 flex text-center items-center justify-center cursor-pointer"
+                    onClick={HandleLogin}
                   >
-                    <button className="">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      id="Login"
+                      className="w-6 h-6 flex justify-center items-center"
+                    >
+                      <path
+                        d="M14 10 8 5v3H1v4h7v3l6-5zm3 7H9v2h8c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2H9v2h8v14z"
+                        fill="#ee5c24"
+                        className="color000000 svgShape"
+                      ></path>
+                    </svg>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Button fullWidth variant="text" size="sm" className="">
+                    {userType === "user" && imageSrcUser ? (
+                      <>
+                        <div>{navListUser}</div>
+                        <Link to={`ProfileDetails/${UserId}`}>
+                          <img
+                            src={imageSrcUser}
+                            alt="User"
+                            className="w-12 h-12 rounded-full cursor-pointer"
+                          />
+                        </Link>
+                      </>
+                    ) : userType === "admin" && imageSrcAdmin ? (
+                      <>
+                        <div>{navListAdmin}</div>
+                        <Link
+                          className=" pDetails"
+                          to={`Admin-Details/${AdminId}`}
+                        >
+                          <img
+                            src={imageSrcAdmin}
+                            alt="Admin"
+                            className="w-12 h-12 rounded-full cursor-pointer"
+                          />
+                        </Link>
+                      </>
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          className="w-6 h-6 text-gray-400"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 14l9-5-9-5-9 5 9 5z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 14l9-5-9-5-9 5 9 5z"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant="text"
+                    size="sm"
+                    className=""
+                    onClick={handleLogout}
+                  >
+                    <div
+                      className="profile"
+                      style={{ width: "48px", height: "48px" }}
+                    >
                       <svg
                         className="w-6 h-6"
                         viewBox="0 0 26 24"
@@ -454,36 +692,10 @@ export function NavbarDefault() {
                           fill="#EE5C24"
                         />
                       </svg>
-                    </button>
-                  </div>
-                </Button> */}
-                <Button
-                  fullWidth
-                  variant="text"
-                  size="sm"
-                  className=""
-                  onClick={handleLogout}
-                >
-                  <div
-                    className="profile"
-                    style={{ width: "48px", height: "48px" }}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      viewBox="0 0 26 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M17.2188 6.39062V8.82812L18.7813 7.28125V4.40625L18 3.625H3.9375L3.15625 4.40625V5.16563L3.125 5.1875V21.2656L3.6875 21.9844L11.5 24.6719L12.5 23.9375V22.375H18L18.7813 21.5938V18.7656L17.2188 17.2031V20.8125H12.5V7.85938L11.9844 7.14062L6.30625 5.1875H17.2188V6.39062ZM10.9375 22.8125L4.6875 20.7188V6.3125L10.9375 8.40625V22.8125ZM21.125 13.75H13.3594V12.1875H21.0625L18.5625 9.6875L19.6719 8.59375L23.5312 12.4375V13.5469L19.6406 17.4219L18.5469 16.3281L21.125 13.75Z"
-                        fill="#EE5C24"
-                      />
-                    </svg>
-                  </div>
-                </Button>
-              </div>
+                    </div>
+                  </Button>
+                </>
+              )}
             </div>
           </Collapse>
         </Navbar>

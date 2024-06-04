@@ -12,16 +12,16 @@ function UserHome() {
   const navigate = useNavigate();
   const UserId = localStorage.getItem("User_Id");
   const communityIdLocal = localStorage.getItem("CommunityId");
+  const name = localStorage.getItem("firstname");
   useEffect(() => {
     // Retrieve name from localStorage when component mounts
-    const name = localStorage.getItem("firstname");
     if (name) {
       setUserName(name);
     }
     if (communityIdLocal) {
       setCommunityCreated(true);
     }
-  }, []);
+  }, [name, communityIdLocal]); // no name , communityIdlocal , if show error
   useEffect(() => {
     const fetchRelativesCount = async () => {
       try {

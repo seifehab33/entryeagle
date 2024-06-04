@@ -17,10 +17,15 @@ function ContactUs() {
     setSelectedSubject(event.target.value);
   };
   useEffect(() => {
-    // Retrieve first name from localStorage
-    const storedFirstName = localStorage.getItem("firstname");
-    if (storedFirstName) {
-      setFname(storedFirstName);
+    // Try to get 'Admin_name' from localStorage
+    const adminName = localStorage.getItem("Admin_Name");
+    if (adminName) {
+      setFname(adminName);
+    } else {
+      const storedFirstName = localStorage.getItem("firstname");
+      if (storedFirstName) {
+        setFname(storedFirstName);
+      }
     }
   }, []);
   const handleSubmit = async (event) => {
