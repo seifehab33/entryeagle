@@ -122,7 +122,7 @@ function UserHome() {
       <div className="heading capitalize">
         Good Morning, {userName || "Guest"} !
       </div>
-      <div className="statics grid sm:grid-cols-1 md:grid-cols-2 gap-2 py-2 lg:grid-cols-2 gap-y-6">
+      <div className="statics grid sm:grid-cols-1 md:grid-cols-2 gap-x-2 py-2 lg:grid-cols-2 gap-y-6">
         {communityCreated ? (
           <>
             <div className="flex gap-2 ">

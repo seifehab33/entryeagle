@@ -26,22 +26,7 @@ function RelativesList() {
 
     fetchRelativesList();
   }, [communityId]);
-  // useEffect(() => {
-  //   const fetchRelativesCount = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://127.0.0.1:8000/users-in-community/${communityId}/`
-  //       );
-  //       if (response.data) {
-  //         setRelativesCount(response.data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching relatives count:", error);
-  //     }
-  //   };
 
-  //   fetchRelativesCount();
-  // }, [communityId]);
   const handleDelete = () => {
     axios
       .post(

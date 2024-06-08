@@ -88,9 +88,22 @@ function HistoryPerson() {
     };
     return date.toLocaleString(undefined, options); // Adjust formatting as needed
   };
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!personData.length) return <div>No history found</div>;
+  if (loading)
+    return (
+      <div className="text-[#ee5c24] text-center my-2 text-xl">Loading...</div>
+    );
+  if (error)
+    return (
+      <div className="text-[#ee5c24] text-center my-2 text-xl">
+        Error : {error}
+      </div>
+    );
+  if (!personData.length)
+    return (
+      <div className="text-[#ee5c24] text-center my-2 text-xl">
+        No history found
+      </div>
+    );
 
   return (
     <>
@@ -108,7 +121,7 @@ function HistoryPerson() {
                 className="h-[300px] w-[300px] rounded-full   transition duration-300 ease-in-out transform hover:scale-105 object-cover object-center"
               />
             </div>
-            <div className="grid grid-cols-2 gap-2 gap-x-[20px]  lg:absolute left-[40%]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 gap-x-[20px]  lg:absolute left-[40%]">
               <p className="text-[15px] font-semibold text-gray-700 mb-3">
                 <span className="text-[#EE5C24]">FirstName:</span>{" "}
                 {user.first_name}
@@ -124,10 +137,7 @@ function HistoryPerson() {
                 <span className="text-[#EE5C24]">Birthdate:</span>{" "}
                 {user.birth_date}
               </p>
-              {/* <p className="text-[15px] font-semibold text-gray-700 mb-3">
-                <span className="text-[#EE5C24]">Community Id:</span>{" "}
-                {user.Community_ID}
-              </p> */}
+
               <p className="text-[15px] font-semibold text-gray-700 mb-3">
                 <span className="text-[#EE5C24]">Community Id:</span>{" "}
                 {user.Community_IDs && (

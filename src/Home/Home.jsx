@@ -49,9 +49,9 @@ function Home() {
   }, [admin_id]);
 
   return (
-    <div className="home gap-y-1 lg:px-8 px-4 mt-[50px] lg:mt-[30px] mb-7">
+    <div className="home gap-y-1  lg:px-8 px-4 mt-[50px] lg:mt-[30px] mb-7">
       <div className="heading capitalize">Good Morning, {admin_name}!</div>
-      <div className="statics grid grid-cols-2 gap-2 py-2 lg:grid-cols-2 gap-y-6">
+      <div className="statics grid grid-cols-2  gap-x-2 py-2 lg:grid-cols-2 gap-y-6">
         <div className="first-stat stat w-[200px] md:w-[300px] lg:w-[400px] rounded-md">
           <span>Number of Persons</span>
           <div className="flex justify-between">
