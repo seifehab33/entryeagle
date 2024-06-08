@@ -100,7 +100,7 @@ function HistoryPerson() {
     );
   if (!personData.length)
     return (
-      <div className="text-[#ee5c24] text-center my-2 text-xl">
+      <div className="text-[#ee5c24] text-center my-2 text-2xl font-bold capitalize">
         No history found
       </div>
     );
