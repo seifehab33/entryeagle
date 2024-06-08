@@ -14,7 +14,7 @@ function RelativesList() {
     const fetchRelativesList = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/users-in-community/${communityId}/`
+          `https://web-production-22c55.up.railway.app/users-in-community/${communityId}/`
         );
         if (response.data) {
           setRelativesList(response.data);
@@ -44,9 +44,12 @@ function RelativesList() {
   // }, [communityId]);
   const handleDelete = () => {
     axios
-      .post(`http://127.0.0.1:8000/community/delete/${communityId}/`, {
-        person_id: UserId,
-      })
+      .post(
+        `https://web-production-22c55.up.railway.app/community/delete/${communityId}/`,
+        {
+          person_id: UserId,
+        }
+      )
       .then((response) => {
         // Handle success, maybe show a success message
         console.log("User removed from community successfully");
@@ -134,7 +137,7 @@ function RelativesList() {
               >
                 <div className="img-header">
                   <img
-                    src={`http://127.0.0.1:8000/${relative.photo_url}`} // Prepend the base URL to the photo_url
+                    src={`https://web-production-22c55.up.railway.app${relative.photo_url}`} // Prepend the base URL to the photo_url
                     alt={`person-${relative.user_id}`}
                     className="w-[150px] h-[150px] rounded-full object-cover object-top mx-auto"
                   />

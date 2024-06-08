@@ -30,7 +30,7 @@ function Dashboard() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/camera-history/"
+          "https://web-production-22c55.up.railway.app/camera-history/"
         );
         // Reverse the response data array to display from last to first
         const reversedData = response.data.reverse();
@@ -132,7 +132,13 @@ function Dashboard() {
           </div>
         </div>
         <div className="camera-view">
-        <h2>{camera_index === 0 ? "Room A301" : (camera_index === 1 ? "Room A302" : "Unknown room")}</h2>
+          <h2>
+            {camera_index === 0
+              ? "Room A301"
+              : camera_index === 1
+              ? "Room A302"
+              : "Unknown room"}
+          </h2>
           <img
             src={`http://localhost:5000/video_feed/${camera_index}`}
             // alt={`Camera Feed ${cameraId}`}

@@ -36,7 +36,7 @@ function RelativesListCommunity() {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
-          `	http://127.0.0.1:8000/users-in-community/${id}/`
+          `	https://web-production-22c55.up.railway.app/users-in-community/${id}/`
         );
         if (response.status !== 200) {
           throw new Error("Failed to fetch users");
@@ -62,12 +62,12 @@ function RelativesListCommunity() {
       };
       // Send a POST request to add a new person
       await axios.post(
-        "http://127.0.0.1:8000/add-user-to-community/",
+        "https://web-production-22c55.up.railway.app/add-user-to-community/",
         formData
       );
 
       const response = await axios.get(
-        `http://127.0.0.1:8000/users-in-community/${id}/`
+        `https://web-production-22c55.up.railway.app/users-in-community/${id}/`
       );
       if (response.status !== 200) {
         throw new Error("Failed to fetch users");
@@ -143,7 +143,7 @@ function RelativesListCommunity() {
             >
               <div className="img-header">
                 <img
-                  src={`http://127.0.0.1:8000/${user.photo_url}`} // Prepend the base URL to the photo_url
+                  src={`https://web-production-22c55.up.railway.app${user.photo_url}`} // Prepend the base URL to the photo_url
                   alt={`person-${user.user_id}`}
                   className="w-[100px] h-[100px] object-cover object-top rounded-full mx-auto"
                 />

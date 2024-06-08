@@ -51,7 +51,7 @@ function ContactUs() {
     try {
       // Send POST request to Django view using Axios
       const response = await axios.post(
-        "http://127.0.0.1:8000/contact/",
+        "https://web-production-22c55.up.railway.app/contact/",
         formData
       );
 

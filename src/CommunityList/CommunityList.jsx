@@ -38,7 +38,9 @@ function CommunityList() {
   useEffect(() => {
     const fetchCommunities = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/communities/");
+        const response = await fetch(
+          "https://web-production-22c55.up.railway.app/communities/"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch communities");
         }
@@ -53,9 +55,12 @@ function CommunityList() {
   }, []);
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8000/delete-community/`, {
-        data: { community_id: selectedCommunityId },
-      });
+      await axios.delete(
+        `https://web-production-22c55.up.railway.app/delete-community/`,
+        {
+          data: { community_id: selectedCommunityId },
+        }
+      );
       const updatedCommunities = communities.filter(
         (community) => community.Community_ID !== selectedCommunityId
       );

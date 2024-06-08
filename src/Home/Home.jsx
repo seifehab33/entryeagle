@@ -13,7 +13,9 @@ function Home() {
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/get_counts/");
+        const response = await axios.get(
+          "https://web-production-22c55.up.railway.app/get_counts/"
+        );
         setCount(response.data.person_count);
         setCommunityCount(response.data.community_count);
       } catch (error) {
@@ -26,7 +28,7 @@ function Home() {
     const fetchHistory = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/admins/login/history/${admin_id}/`
+          `https://web-production-22c55.up.railway.app/admins/login/history/${admin_id}/`
         );
         if (response.data.history) {
           const historyData = response.data.history.map((item) => ({

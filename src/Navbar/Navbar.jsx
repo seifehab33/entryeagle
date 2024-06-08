@@ -53,7 +53,7 @@ export function NavbarDefault() {
     const fetchUserImage = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/person/${UserId}/image/`
+          `https://web-production-22c55.up.railway.app/person/${UserId}/image/`
         );
         const blob = await response.blob();
         const imageUrl = URL.createObjectURL(blob);
@@ -66,7 +66,7 @@ export function NavbarDefault() {
     const fetchAdminImage = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/admin-image/${AdminId}/`
+          `https://web-production-22c55.up.railway.app/admin-image/${AdminId}/`
         );
         const blob = await response.blob();
         const imageUrl = URL.createObjectURL(blob);

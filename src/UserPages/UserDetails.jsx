@@ -11,7 +11,7 @@ function UserDetails() {
     const fetchPersonDetails = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/persons/${id}/`
+          `https://web-production-22c55.up.railway.app/persons/${id}/`
         );
 
         setPersonCardInfo(response.data);
@@ -26,7 +26,7 @@ function UserDetails() {
     const fetchPersonDetails = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/camera-history/${id}/`
+          `https://web-production-22c55.up.railway.app/camera-history/${id}/`
         );
         const data = response.data;
         if (Array.isArray(data) && data.length > 0) {
@@ -53,7 +53,7 @@ function UserDetails() {
         <div className="p-4 flex bg-[#FAF0DD] items-center gap-[20px] rounded-xl">
           <div className="">
             <img
-              src={`http://127.0.0.1:8000/${personCard.photo_url}`} // Prepend the base URL to the photo_url
+              src={`https://web-production-22c55.up.railway.app${personCard.photo_url}`} // Prepend the base URL to the photo_url
               alt=""
               className="w-[250px] lg:w-[250px] rounded-lg shadow-md"
             />

@@ -26,7 +26,7 @@ function UserHome() {
     const fetchRelativesCount = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/users-in-community/${communityIdLocal}/`
+          `https://web-production-22c55.up.railway.app/users-in-community/${communityIdLocal}/`
         );
         if (response.data) {
           setRelativesCount(response.data);
@@ -42,7 +42,7 @@ function UserHome() {
   const handleCreateCommunity = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/communities/create/",
+        "https://web-production-22c55.up.railway.app/communities/create/",
         { community_id: parseInt(communityId, 10), person_id: UserId }
       );
       console.log("Community created:", response.data);
@@ -60,16 +60,22 @@ function UserHome() {
   const handleCheckCommunity = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
     try {
-      await axios.post("http://127.0.0.1:8000/communities/check/", {
-        community_id: communityId,
-      });
+      await axios.post(
+        "https://web-production-22c55.up.railway.app/communities/check/",
+        {
+          community_id: communityId,
+        }
+      );
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString().split("T")[0];
-      await axios.post("http://127.0.0.1:8000/add-user-to-community/", {
-        person_id: UserId,
-        community_id: communityId,
-        join_date: formattedDate,
-      });
+      await axios.post(
+        "https://web-production-22c55.up.railway.app/add-user-to-community/",
+        {
+          person_id: UserId,
+          community_id: communityId,
+          join_date: formattedDate,
+        }
+      );
       localStorage.setItem("CommunityId", communityId);
       setCommunityCreated(true); // Set communityCreated flag to true
       navigate("/Relatives'List");
@@ -95,7 +101,7 @@ function UserHome() {
     const fetchUserCommunities = async () => {
       try {
         const response = await axios.get(
-          `	http://127.0.0.1:8000/user/${UserId}/communities/`
+          `	https://web-production-22c55.up.railway.app/user/${UserId}/communities/`
         );
         setCommunities(response.data);
       } catch (error) {

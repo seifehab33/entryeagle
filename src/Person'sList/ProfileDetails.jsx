@@ -37,7 +37,9 @@ function ProfileDetails() {
   const handleOpen = (value) => setSize(value);
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8000/person/${id}/`);
+      await axios.delete(
+        `https://web-production-22c55.up.railway.app/person/${id}/`
+      );
       navigate("/Person'sList");
       // setDeleted(true);
     } catch (error) {
@@ -51,7 +53,7 @@ function ProfileDetails() {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/persons/${id}/`
+          `https://web-production-22c55.up.railway.app/persons/${id}/`
         );
         setUser(response.data);
         console.log(response.data);
@@ -61,7 +63,9 @@ function ProfileDetails() {
           ID: response.data.id,
           BirthDate: response.data.birth_date,
           Email: response.data.email,
-          photo_url: response.data.photo_url,
+          // photo_url: response.data.photo_url,
+          photo_url: response.data.photo_url, // Direct URL
+
           community_id: response.data.Community_IDs,
         });
       } catch (error) {
@@ -75,7 +79,7 @@ function ProfileDetails() {
   const removeUserFromCommunity = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/remove-user-from-community/",
+        "https://web-production-22c55.up.railway.app/remove-user-from-community/",
         {
           person_id: user.id,
           community_id: parseInt(ComId), // Assuming you have this property in your user object
@@ -94,13 +98,16 @@ function ProfileDetails() {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
-      await fetch(`http://127.0.0.1:8000/person/${id}/edit/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      await fetch(
+        `https://web-production-22c55.up.railway.app/person/${id}/edit/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       console.log("Form data submitted:", formData);
 
@@ -127,7 +134,7 @@ function ProfileDetails() {
       <div className="heading-details flex md:flex-row lg:flex-row flex-col gap-2 justify-between mb-5 lg:mb-8">
         <div className="flex flex-col gap-2 md:flex-row lg:flex-row lg:gap-8">
           <img
-            src={`http://127.0.0.1:8000/${formData.photo_url}`}
+            src={`https://web-production-22c55.up.railway.app${formData.photo_url}/`}
             alt="userimg"
             className="h-[300px] w-[300px] rounded-full   transition duration-300 ease-in-out transform hover:scale-105 object-cover object-top"
           />

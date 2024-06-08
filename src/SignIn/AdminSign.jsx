@@ -14,16 +14,19 @@ function AdminSign({ onSignIn }) {
 
   const handleSignIn = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/Login/Admin/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-        }),
-      });
+      const response = await fetch(
+        "https://web-production-22c55.up.railway.app/Login/Admin/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password,
+          }),
+        }
+      );
 
       if (response.ok) {
         // localStorage.setItem("authentication", "admin");

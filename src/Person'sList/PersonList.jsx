@@ -18,7 +18,9 @@ function PersonList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/persons/");
+        const response = await axios.get(
+          "https://web-production-22c55.up.railway.app/persons/"
+        );
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -67,7 +69,7 @@ function PersonList() {
             >
               <div className="img-header">
                 <img
-                  src={`http://127.0.0.1:8000/${user.photo_url}`} // Prepend the base URL to the photo_url
+                  src={`https://web-production-22c55.up.railway.app${user.photo_url}`} // Prepend the base URL to the photo_url
                   alt={`person-${user.id}`}
                   className="w-[150px] h-[150px] rounded-full mx-auto object-cover object-top"
                   loading="lazy"

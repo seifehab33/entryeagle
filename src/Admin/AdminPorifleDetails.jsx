@@ -50,7 +50,7 @@ function AdminPorifleDetails() {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/admin-details/${AdminId}/`
+          `https://web-production-22c55.up.railway.app/admin-details/${AdminId}/`
         );
         setUser(response.data);
         console.log(response.data);
@@ -94,7 +94,7 @@ function AdminPorifleDetails() {
     e.preventDefault();
     try {
       await axios.put(
-        `http://127.0.0.1:8000/admin-edit/${AdminId}/`,
+        `https://web-production-22c55.up.railway.app/admin-edit/${AdminId}/`,
         formData,
         {
           headers: {
@@ -140,7 +140,7 @@ function AdminPorifleDetails() {
       <div className="heading-details flex md:flex-row lg:flex-row flex-col gap-2 justify-between mb-5 lg:mb-8">
         <div className="flex flex-col gap-2 md:flex-row lg:flex-row lg:gap-8">
           <img
-            src={`http://127.0.0.1:8000/${formData.image_url}`}
+            src={`https://web-production-22c55.up.railway.app${formData.image_url}`}
             alt="userimg"
             className="h-[300px] w-[300px] rounded-full   transition duration-300 ease-in-out transform hover:scale-105 object-cover object-center"
           />
