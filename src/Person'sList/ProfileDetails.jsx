@@ -30,8 +30,6 @@ function ProfileDetails() {
     community_id: "",
   });
 
-  const formattedName = `${user.first_name}_${user.last_name}`;
-
   const navigate = useNavigate();
 
   const handleOpen = (value) => setSize(value);
@@ -124,6 +122,7 @@ function ProfileDetails() {
       [name]: value,
     });
   };
+  const formattedName = `${formData.first_name}_${formData.last_name}`;
 
   if (!user) {
     return <p>User not found</p>;
