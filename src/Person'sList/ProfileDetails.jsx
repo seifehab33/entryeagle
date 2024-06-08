@@ -18,6 +18,8 @@ function ProfileDetails() {
   const [size, setSize] = useState(null);
   const { userType } = useContext(UserContext);
   const AdminId = localStorage.getItem("Admin_id");
+  const [formattedName, setFormattedName] = useState("");
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -122,8 +124,10 @@ function ProfileDetails() {
       [name]: value,
     });
   };
-  const formattedName = `${formData.first_name}_${formData.last_name}`;
-
+  useEffect(() => {
+    const { first_name, last_name } = formData;
+    setFormattedName(`${first_name}_${last_name}`);
+  }, [formData]);
   if (!user) {
     return <p>User not found</p>;
   }
