@@ -129,7 +129,11 @@ function ProfileDetails() {
     setFormattedName(`${first_name}_${last_name}`);
   }, [formData]);
   if (!user) {
-    return <p>User not found</p>;
+    return (
+      <div className="text-[#ee5c24] text-center my-2 text-2xl font-bold capitalize">
+        User not found
+      </div>
+    );
   }
 
   return (
